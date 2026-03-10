@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renamer File</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; padding: 20px; color: #333; }
+        .container { max-width: 500px; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: auto; }
+        h2 { text-align: center; color: #1a73e8; margin-bottom: 25px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; transition: border 0.3s; }
+        input:focus { border-color: #1a73e8; outline: none; }
+        
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; margin-top: 10px; transition: 0.3s; }
+        .btn-generate { background: #1a73e8; color: white; }
+        .btn-generate:hover { background: #1557b0; }
+        
+        .result-box { margin-top: 25px; padding: 20px; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 8px; text-align: center; }
+        #finalName { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #d93025; font-size: 16px; word-break: break-all; margin-bottom: 15px; display: block; }
+        
+        .btn-copy { background: #34a853; color: white; display: none; } /* Tersembunyi sampai ada hasil */
+        .btn-copy:hover { background: #2d8e47; }
+        
+        .status-msg { font-size: 12px; color: #34a853; margin-top: 5px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Rename File Tool</h2>
+    
+    <div class="form-group">
+        <label>Line Kerja</label>
+        <select id="lineKerja">
+            <option value="OFFSET">OFFSET</option>
+            <option value="DIGITAL">DIGITAL</option>
+            <option value="OUTDOOR">OUTDOOR</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Inisial OPG (ID)</label>
+        <input type="text" id="opg" placeholder="Contoh: ADM01">
+    </div>
+
+    <div class="form-group">
+        <label>Nomor WO & Nama Konsumen</label>
+        <input type="text" id="woNama" placeholder="Contoh: 502-BudiSantoso">
+    </div>
+
+    <div class="form-group">
+        <label>Jenis Kertas</label>
+        <select id="kertas">
+            <option value="ArtPaper150">Art Paper 150g</option>
+            <option value="HVS80">HVS 80g</option>
+            <option value="Carton260">Carton 260g</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label>Jumlah Cetak</label>
+        <input type="number" id="jumlah" placeholder="Contoh: 1000">
+    </div>
+
+    <div class="form-group">
+        <label>Finishing (Opsional)</label>
+        <input type="text" id="finishing" placeholder="Contoh: LaminatingDoff">
+    </div>
+
+    <button class="btn-generate" onclick="generateName()">PROSES NAMA</button>
+
+    <div class="result-box">
+        <span id="finalName">Hasil akan muncul di sini...</span>
+        <button id="copyBtn" class="btn-copy" onclick="copyToClipboard()">Salin Nama File</button>
+        <div id="status" class="status-msg">Berhasil disalin! ✅</div>
+    </div>
+</div>
+
+<script>
+    function generateName() {
+        const line = document.getElementById('lineKerja').value;
+        const opg = document.getElementById('opg').value.trim();
+        const woNama = document.getElementById('woNama').value.trim();
+        const kertas = document.getElementById('kertas').value;
+        const jumlah = document.getElementById('jumlah').value.trim();
+        const finishing = document.getElementById('finishing').value.trim();
+
+        if (!opg || !woNama || !jumlah) {
+            alert("Mohon isi OPG, WO/Nama, dan Jumlah!");
+            return;
+        }
+
+        // Susun struktur awal
+        let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
+        
+        // Tambahkan finishing jika ada
+        if (finishing !== "") {
+            result += `_${finishing}`;
+        }
+
+        // Bersihkan spasi menjadi dash (-)
+        const cleanResult = result.replace(/\s+/g, '-');
+
+        // Tampilkan hasil dan munculkan tombol copy
+        const display = document.getElementById('finalName');
+        display.innerText = cleanResult;
+        document.getElementById('copyBtn').style.display = 'block';
+        document.getElementById('status').style.display = 'none'; // Sembunyikan status lama
+    }
+
+    function copyToClipboard() {
+        const textToCopy = document.getElementById('finalName').innerText;
+        
+        // Fungsi modern untuk menyalin teks
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            
+            // Sembunyikan notifikasi "Berhasil" setelah 2 detik
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 2000);
+        }).catch(err => {
+            console.error('Gagal menyalin: ', err);
+            alert("Gagal menyalin teks.");
+        });
+    }
+</script>
+
+</body>
+</html>
