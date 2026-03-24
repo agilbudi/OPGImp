@@ -194,16 +194,17 @@
         const kertas = document.getElementById('kertas').value;
         const qty = document.getElementById('qty').value;
         const desain = document.getElementById('desain').value;
-        const bolakbalik = document.getElementById('bolakbalik').checked;
+        const bolakbalik = document.getElementById('bolakbalik');
         const finishing = document.getElementById('finishing').value.trim();
 
         if (!opg || !woNama || !qty || !desain) {
             alert("Mohon isi OPG, WO/Nama, Jumlah Cetak, dan Jumlah Desain!");
             return;
         }
-
+        const jumlah = bolakbalik.checked ? `${desain}BB@${qty}X` : `${desain}@${qty}X`;
+        
         // Susun struktur awal
-        let result = `${line}_${opg}_${woNama}_${kertas}_${qty}`;
+        let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
         
         // Tambahkan finishing jika ada
         if (finishing !== "") {
