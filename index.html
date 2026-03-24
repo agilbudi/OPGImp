@@ -19,12 +19,10 @@
     <div class="row text-center">
         <h2>Renamer OPG Tools</h2>
     </div>
-    <div class="row align-items-start">
-        <div class="col-3 text-center">
-        kolom tambahan
-        </div>
+    <form class="row align-items-start">
+        <div class="col-md-1"></div>
         <div class="col-6">
-            <form class="row g-3">
+            <div class="row g-3">
                 <div class="col-12">
                     <label for="lineKerja" class="form-label">Line</label>
                     <select id="lineKerja" class="form-select">
@@ -35,68 +33,96 @@
                         <option value="PE">PRIORITAS</option>
                     </select>
                 </div>
-
                 <div class="col-md-6">
                     <label for="opg" class="form-label">Inisial OPG</label>
                     <input type="text" id="opg" class="form-control" placeholder="Contoh: AG">
                 </div>
-
                 <div class="col-12">
                     <label for="woNama" class="form-label">Nomor WO & Nama Konsumen</label>
                     <input type="text" id="woNama" class="form-control" placeholder="Contoh: 100326-123 Budi Santoso">
                 </div>
-
-                <div class="col-md-6">
-                    <label for="kertas" class="form-label">Jenis Kertas</label>
-                    <select id="kertas" class="form-select">
-                        <option value="" disabled>----Art Paper----</option>
-                        <option value="AP 100">AP 100g</option>
-                        <option value="AP 120">AP 120g</option>
-                        <option value="AP 150">AP 150g</option>
-                        <option value="" disabled>----Ivory----</option>
-                        <option value="IV 210">IV 210g</option>
-                        <option value="IV 230">IV 230g</option>
-                        <option value="IV 260">IV 260g</option>
-                        <option value="" disabled>----Mate Paper----</option>
-                        <option value="MP 120">MP 120g</option>
-                        <option value="MP 150">MP 150g</option>
-                        <option value="" disabled>----HVS----</option>
-                        <option value="HVS 70">HVS 70g</option>
-                        <option value="HVS 80">HVS 80g</option>
-                        <option value="HVS 100">HVS 100g</option>
-                        <option value="" disabled>----Book Paper----</option>
-                        <option value="BP 57">BP 57g</option>
-                        <option value="BP 70">BP 70g</option>
-                        <option value="" disabled>----other----</option>
-                        <option value="KRUNGKUT">KRUNGKUT</option>
-                        <option value="BC THIK">BC THIK</option>
-                        <option value="LINEN">LINEN</option>
-                        <option value="JASMIN WHITE">JASMIN WHITE</option>
-                        <option value="JASMIN GOLD">JASMIN GOLD</option>
-                        <option value="LIME">LIME</option>
-                        <option value="LMO">LMO</option>
-                        <option value="" disabled>----STICKER----</option>
-                        <option value="CROMO">CROMO</option>
-                        <option value="TRANSPARANT">TRANSPARANT</option>
-                        <option value="VINYL-MATTE">VINYL MATTE</option>
-                        <option value="VINYL-GLOSSY">VINYL GLOSSY</option>
-                    </select>
-                </div>
-
                 <div class="col-12">
-                    <label for="jumlah" class="form-label">Jumlah Cetak</label>
-                    <input type="text" id="jumlah" class="form-control" placeholder="Contoh: 2BB@10X">
-                </div>
+                    <input type="radio" class="btn-check" name="options-base" id="option_A3" autocomplete="off" checked>
+                    <label class="btn" for="option_A3">A3+</label>
 
-                <div class="col-12">
-                    <label for="finishing" class="form-label">Finishing (Opsional)</label>
-                    <input type="text" id="finishing" class="form-control" placeholder="Contoh: LaminatingDoff">
+                    <input type="radio" class="btn-check" name="options-base" id="option_Outdoor" autocomplete="off">
+                    <label class="btn" for="option_Outdoor">Outdoor</label>
+
+                    <input type="radio" class="btn-check" name="options-base" id="option_Lainya" autocomplete="off">
+                    <label class="btn" for="option_Lainya">Lainya</label>
                 </div>
+<!-- bagian form kertas -->
+                <div class="col-12 form-kertas">
+                    <div class="col-md-6">
+                        <label for="kertas" class="form-label">Jenis Kertas</label>
+                        <select id="kertas" class="form-select">
+                            <option value="" disabled>----Art Paper----</option>
+                            <option value="AP 100">AP 100g</option>
+                            <option value="AP 120">AP 120g</option>
+                            <option value="AP 150">AP 150g</option>
+                            <option value="" disabled>----Ivory----</option>
+                            <option value="IV 210">IV 210g</option>
+                            <option value="IV 230">IV 230g</option>
+                            <option value="IV 260">IV 260g</option>
+                            <option value="" disabled>----Mate Paper----</option>
+                            <option value="MP 120">MP 120g</option>
+                            <option value="MP 150">MP 150g</option>
+                            <option value="" disabled>----HVS----</option>
+                            <option value="HVS 70">HVS 70g</option>
+                            <option value="HVS 80">HVS 80g</option>
+                            <option value="HVS 100">HVS 100g</option>
+                            <option value="" disabled>----Book Paper----</option>
+                            <option value="BP 57">BP 57g</option>
+                            <option value="BP 70">BP 70g</option>
+                            <option value="" disabled>----other----</option>
+                            <option value="KRUNGKUT">KRUNGKUT</option>
+                            <option value="BC THIK">BC THIK</option>
+                            <option value="LINEN">LINEN</option>
+                            <option value="JASMIN WHITE">JASMIN WHITE</option>
+                            <option value="JASMIN GOLD">JASMIN GOLD</option>
+                            <option value="LIME">LIME</option>
+                            <option value="LMO">LMO</option>
+                            <option value="" disabled>----STICKER----</option>
+                            <option value="CROMO">CROMO</option>
+                            <option value="TRANSPARANT">TRANSPARANT</option>
+                            <option value="VINYL-MATTE">VINYL MATTE</option>
+                            <option value="VINYL-GLOSSY">VINYL GLOSSY</option>
+                        </select>
+                    </div>
+                    <space class="mx-3"></space>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <label for="desain" class="form-label">Jumlah Desain</label>
+                                <input type="number" id="desain" class="form-control" placeholder="1">
+                            </div>
+                            <div class="col-2 form-check">
+                                <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
+                                <label class="form-check-label" for="bolakbalik">
+                                    2 muka
+                                </label>
+                            </div>
+                            <div class="col-4">
+                                <label for="qty" class="form-label">Jumlah Cetak</label>
+                                <input type="number" id="qty" class="form-control" placeholder="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!-- akhir bagian form kertas -->
+<!-- bagian form outdoor -->
+                <div class="col-12 form-outdoor" style="display: none;">
+                </div>
+<!-- akhir bagian form outdoor -->
+<!-- bagian form lainya -->
+                <div class="col-12 form-lainya" style="display: none;">
+                </div>
+<!-- akhir bagian form lainya -->
 
                 <div class="col-12">
                     <small class="text-muted">Pastikan semua data sudah benar sebelum menekan tombol PROSES.</small>
                     <div>
-                        <button type="button" class="btn btn-primary btn-generate" onclick="generateName()">PROSES</button>
+                        <button type="button" class="btn btn-primary btn-generate" onclick="generateKertas()">PROSES</button>
                     </div>
                 </div>
 
@@ -105,39 +131,79 @@
                         <div class="card-header">
                             Hasil Nama File
                         </div>
-                        <div class="card-body result-box">
+                        <div class="card-body">
+                            <div class="result-box">
                                 <span id="finalName">Hasil akan muncul di sini...</span>
                                 <button type="button" id="copyBtn" class="btn btn-primary btn-copy" onclick="copyToClipboard()">Salin Nama File</button>
                                 <div id="status" class="status-msg">Berhasil disalin! ✅</div>
-                            
+                            </div>
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
-        <div class="col-3 text-center">
-        kolom tambahan
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <label for="finishing" class="form-label">Finishing (Opsional)</label>
+            <input type="text" id="finishing" class="form-control" placeholder="Contoh: LaminatingDoff">
         </div>
-    </div>
+    </form>
 </div>
 
 
 <script>
-    function generateName() {
+        // form handle
+        const optionA3 = document.getElementById('option_A3');
+        const optionOutdoor = document.getElementById('option_Outdoor');
+        const optionLainya = document.getElementById('option_Lainya');
+
+        const formKertas = document.querySelector('.form-kertas');
+        const formOutdoor = document.querySelector('.form-outdoor');
+        const formLainya = document.querySelector('.form-lainya');
+
+        function updateFormDisplay() {
+            if (optionA3.checked) {
+                formKertas.style.display = 'block';
+                formOutdoor.style.display = 'none';
+                formLainya.style.display = 'none';
+            } else if (optionOutdoor.checked) {
+                formKertas.style.display = 'none';
+                formOutdoor.style.display = 'block';
+                formLainya.style.display = 'none';
+            } else if (optionLainya.checked) {
+                formKertas.style.display = 'none';
+                formOutdoor.style.display = 'none';
+                formLainya.style.display = 'block';
+            }
+        }
+
+        optionA3.addEventListener('change', updateFormDisplay);
+        optionOutdoor.addEventListener('change', updateFormDisplay);
+        optionLainya.addEventListener('change', updateFormDisplay);
+
+        updateFormDisplay();
+
+    function generateKertas() {
+
+        // nilai umum
         const line = document.getElementById('lineKerja').value;
         const opg = document.getElementById('opg').value.trim();
         const woNama = document.getElementById('woNama').value.trim();
+
+        // nilai kertas
         const kertas = document.getElementById('kertas').value;
-        const jumlah = document.getElementById('jumlah').value;
+        const qty = document.getElementById('qty').value;
+        const desain = document.getElementById('desain').value;
+        const bolakbalik = document.getElementById('bolakbalik').checked;
         const finishing = document.getElementById('finishing').value.trim();
 
-        if (!opg || !woNama || !jumlah) {
-            alert("Mohon isi OPG, WO/Nama, dan Jumlah!");
+        if (!opg || !woNama || !qty || !desain) {
+            alert("Mohon isi OPG, WO/Nama, Jumlah Cetak, dan Jumlah Desain!");
             return;
         }
 
         // Susun struktur awal
-        let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
+        let result = `${line}_${opg}_${woNama}_${kertas}_${qty}`;
         
         // Tambahkan finishing jika ada
         if (finishing !== "") {
