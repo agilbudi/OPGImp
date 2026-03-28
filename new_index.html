@@ -6,97 +6,53 @@
     <title>Renamer File</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <style>
-        .result-box { 
-            margin-top: 25px; 
-            padding: 20px; 
-            background: #f8f9fa; 
-            border: 2px dashed #dee2e6; 
-            border-radius: 8px; text-align: center; 
-        }
-        #finalName { 
-            font-family: 'Courier New', Courier, monospace; 
-            font-weight: bold; 
-            color: #d93025; 
-            font-size: 16px; 
-            word-break: break-all; 
-            margin-bottom: 15px; 
-            display: block; 
-        }
-        .btn-copy { 
-            background: #34a853; 
-            color: white; 
-            display: none; 
-        }
-        .status-msg { 
-            font-size: 12px; 
-            color: #34a853; 
-            margin-top: 5px; 
-            display: none; 
-        }
-        body {
-            background: #f2f2f7;
-            color: #1f1f1f;
-            font-family: Inter, system-ui, sans-serif;
-        }
-        .form-utama {
-            border: 4px solid #2a3495;
-            background: #ffffff;
-        }
-        .form-kertas {
-            border: 4px solid #d87d2a;
-            background: #fff8e6;
-        }
-        .form-outdoor {
-            border: 4px solid #574d9e;
-            background: #e6e2ff;
-        }
+        .result-box { margin-top: 25px; padding: 20px; background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 8px; text-align: center; }
+        #finalName { font-family: 'Courier New', Courier, monospace; font-weight: bold; color: #d93025; font-size: 16px; word-break: break-all; margin-bottom: 15px; display: block; }
+        .btn-copy { background: #34a853; color: white; display: none; }
+        .status-msg { font-size: 12px; color: #34a853; margin-top: 5px; display: none; }
     </style>
 </head>
 <body>
 
-    <div class="container  p-2">
+  
+<div class="container ">
     <div class="row text-center">
         <h2>Renamer OPG Tools</h2>
     </div>
-    <form class="row align-items-center">
+    <form class="row align-items-start">
+        <div class="col-md-1"></div>
         <div class="col-6">
             <div class="row g-3">
-
-<!-- bagian form utama -->
-                <div class="col-12 p-3 form-utama rounded-4">
-                    <div class="col-12">
-                        <label for="lineKerja" class="form-label">Line</label>
-                        <select id="lineKerja" class="form-select">
-                            <option value="DTG">DTG</option>
-                            <option value="OL">OL</option>
-                            <option value="CO">CO</option>
-                            <option value="S">MARKETPLACE</option>
-                            <option value="PE">PRIORITAS</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="opg" class="form-label">Inisial OPG</label>
-                        <input type="text" id="opg" class="form-control" placeholder="Contoh: AG">
-                    </div>
-                    <div class="col-12">
-                        <label for="woNama" class="form-label">Nomor WO & Nama Konsumen</label>
-                        <input type="text" id="woNama" class="form-control" placeholder="Contoh: 100326-123 Budi Santoso">
-                    </div>
+                <div class="col-12">
+                    <label for="lineKerja" class="form-label">Line</label>
+                    <select id="lineKerja" class="form-select">
+                        <option value="DTG">DTG</option>
+                        <option value="OL">OL</option>
+                        <option value="CO">CO</option>
+                        <option value="S">MARKETPLACE</option>
+                        <option value="PE">PRIORITAS</option>
+                    </select>
                 </div>
-
-                <div class="col-12 btn-group p-3" role="group" style="display: none;">
+                <div class="col-md-6">
+                    <label for="opg" class="form-label">Inisial OPG</label>
+                    <input type="text" id="opg" class="form-control" placeholder="Contoh: AG">
+                </div>
+                <div class="col-12">
+                    <label for="woNama" class="form-label">Nomor WO & Nama Konsumen</label>
+                    <input type="text" id="woNama" class="form-control" placeholder="Contoh: 100326-123 Budi Santoso">
+                </div>
+                <div class="col-12">
                     <input type="radio" class="btn-check" name="options-base" id="option_A3" autocomplete="off" checked>
-                    <label class="btn btn-outline-secondary" for="option_A3">A3+</label>
+                    <label class="btn" for="option_A3">A3+</label>
 
                     <input type="radio" class="btn-check" name="options-base" id="option_Outdoor" autocomplete="off">
-                    <label class="btn btn-outline-secondary" for="option_Outdoor">Outdoor</label>
+                    <label class="btn" for="option_Outdoor">Outdoor</label>
 
                     <input type="radio" class="btn-check" name="options-base" id="option_Lainya" autocomplete="off">
-                    <label class="btn btn-outline-secondary" for="option_Lainya">Lainya</label>
+                    <label class="btn" for="option_Lainya">Lainya</label>
                 </div>
-
 <!-- bagian form kertas -->
-                <div class="col-12 p-3 form-kertas rounded-4">
+                <div class="col-12 form-kertas">
                     <div class="col-md-6">
                         <label for="kertas" class="form-label">Jenis Kertas</label>
                         <select id="kertas" class="form-select">
@@ -134,11 +90,12 @@
                             <option value="VINYL-GLOSSY">VINYL GLOSSY</option>
                         </select>
                     </div>
-                    <div class="container my-3">
+                    <space class="mx-3"></space>
+                    <div class="container">
                         <div class="row">
                             <div class="col-4">
                                 <label for="desain" class="form-label">Jumlah Desain</label>
-                                <input type="number" id="desain" class="form-control" placeholder="1" value="1" min="1">
+                                <input type="number" id="desain" class="form-control" placeholder="1" value="1">
                             </div>
                             <div class="col-2 form-check">
                                 <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
@@ -148,26 +105,12 @@
                             </div>
                             <div class="col-4">
                                 <label for="qty" class="form-label">Jumlah Cetak</label>
-                                <input type="number" id="qty" class="form-control" placeholder="1" value="1" min="1">
+                                <input type="number" id="qty" class="form-control" placeholder="1">
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-3 ms-2">
-                        <small class="text-muted">(Opsional)</small>
-                    </div>
-                    <div class="col-md-12 my-3">            
-                        <label for="finishing" class="form-label">Finishing</label>
-                        <input type="text" id="finishing" class="form-control" placeholder="Contoh: LaminatingDoff">
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <small class="text-muted my-3">Pastikan semua data sudah benar sebelum menekan tombol PROSES.</small>
-                        <div>
-                            <button type="button" class="my-2 btn btn-primary btn-generate" onclick="generateKertas()">PROSES</button>
                         </div>
                     </div>
                 </div>
 <!-- akhir bagian form kertas -->
- 
 <!-- bagian form outdoor -->
                 <div class="col-12 form-outdoor" style="display: none;">
                 </div>
@@ -177,6 +120,12 @@
                 </div>
 <!-- akhir bagian form lainya -->
 
+                <div class="col-12">
+                    <small class="text-muted">Pastikan semua data sudah benar sebelum menekan tombol PROSES.</small>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-generate" onclick="generateKertas()">PROSES</button>
+                    </div>
+                </div>
 
                 <div class="col-12">
                     <div class="card ">
@@ -194,98 +143,103 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-4">
+            <label for="finishing" class="form-label">Finishing (Opsional)</label>
+            <input type="text" id="finishing" class="form-control" placeholder="Contoh: LaminatingDoff">
+        </div>
     </form>
 </div>
 
-    <script>
-            // form handle
-            const optionA3 = document.getElementById('option_A3');
-            const optionOutdoor = document.getElementById('option_Outdoor');
-            const optionLainya = document.getElementById('option_Lainya');
 
-            const formKertas = document.querySelector('.form-kertas');
-            const formOutdoor = document.querySelector('.form-outdoor');
-            const formLainya = document.querySelector('.form-lainya');
+<script>
+        // form handle
+        const optionA3 = document.getElementById('option_A3');
+        const optionOutdoor = document.getElementById('option_Outdoor');
+        const optionLainya = document.getElementById('option_Lainya');
 
-            function updateFormDisplay() {
-                if (optionA3.checked) {
-                    formKertas.style.display = 'block';
-                    formOutdoor.style.display = 'none';
-                    formLainya.style.display = 'none';
-                } else if (optionOutdoor.checked) {
-                    formKertas.style.display = 'none';
-                    formOutdoor.style.display = 'block';
-                    formLainya.style.display = 'none';
-                } else if (optionLainya.checked) {
-                    formKertas.style.display = 'none';
-                    formOutdoor.style.display = 'none';
-                    formLainya.style.display = 'block';
-                }
+        const formKertas = document.querySelector('.form-kertas');
+        const formOutdoor = document.querySelector('.form-outdoor');
+        const formLainya = document.querySelector('.form-lainya');
+
+        function updateFormDisplay() {
+            if (optionA3.checked) {
+                formKertas.style.display = 'block';
+                formOutdoor.style.display = 'none';
+                formLainya.style.display = 'none';
+            } else if (optionOutdoor.checked) {
+                formKertas.style.display = 'none';
+                formOutdoor.style.display = 'block';
+                formLainya.style.display = 'none';
+            } else if (optionLainya.checked) {
+                formKertas.style.display = 'none';
+                formOutdoor.style.display = 'none';
+                formLainya.style.display = 'block';
             }
-
-            optionA3.addEventListener('change', updateFormDisplay);
-            optionOutdoor.addEventListener('change', updateFormDisplay);
-            optionLainya.addEventListener('change', updateFormDisplay);
-
-            updateFormDisplay();
-
-        function generateKertas() {
-
-            // nilai umum
-            const line = document.getElementById('lineKerja').value;
-            const opg = document.getElementById('opg').value.trim();
-            const woNama = document.getElementById('woNama').value.trim();
-
-            // nilai kertas
-            const kertas = document.getElementById('kertas').value;
-            const qty = document.getElementById('qty').value;
-            const desain = document.getElementById('desain').value;
-            const bolakbalik = document.getElementById('bolakbalik');
-            const finishing = document.getElementById('finishing').value.trim();
-
-            if (!opg || !woNama || !qty || !desain) {
-                alert("Mohon isi OPG, WO/Nama, Jumlah Cetak, dan Jumlah Desain!");
-                return;
-            }
-            const jumlah = bolakbalik.checked ? `${desain}BB@${qty}X` : `${desain}@${qty}X`;
-            
-            // Susun struktur awal
-            let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
-            
-            // Tambahkan finishing jika ada
-            if (finishing !== "") {
-                result += `_${finishing}`;
-            }
-
-            // Bersihkan spasi menjadi dash (-)
-            //const cleanResult = result.replace(/\s+/g, '-');
-
-            // Tampilkan hasil dan munculkan tombol copy
-            const display = document.getElementById('finalName');
-            display.innerText = result;
-            document.getElementById('copyBtn').style.display = 'block';
-            document.getElementById('status').style.display = 'none'; // Sembunyikan status lama
         }
 
-        function copyToClipboard() {
-            const textToCopy = document.getElementById('finalName').innerText;
-            
-            // Fungsi modern untuk menyalin teks
-            navigator.clipboard.writeText(textToCopy).then(() => {
-                const status = document.getElementById('status');
-                status.style.display = 'block';
-                
-                // Sembunyikan notifikasi "Berhasil" setelah 2 detik
-                setTimeout(() => {
-                    status.style.display = 'none';
-                }, 2000);
-            }).catch(err => {
-                console.error('Gagal menyalin: ', err);
-                alert("Gagal menyalin teks.");
-            });
-        }
-    </script>
+        optionA3.addEventListener('change', updateFormDisplay);
+        optionOutdoor.addEventListener('change', updateFormDisplay);
+        optionLainya.addEventListener('change', updateFormDisplay);
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+        updateFormDisplay();
+
+    function generateKertas() {
+
+        // nilai umum
+        const line = document.getElementById('lineKerja').value;
+        const opg = document.getElementById('opg').value.trim();
+        const woNama = document.getElementById('woNama').value.trim();
+
+        // nilai kertas
+        const kertas = document.getElementById('kertas').value;
+        const qty = document.getElementById('qty').value;
+        const desain = document.getElementById('desain').value;
+        const bolakbalik = document.getElementById('bolakbalik');
+        const finishing = document.getElementById('finishing').value.trim();
+
+        if (!opg || !woNama || !qty || !desain) {
+            alert("Mohon isi OPG, WO/Nama, Jumlah Cetak, dan Jumlah Desain!");
+            return;
+        }
+        const jumlah = bolakbalik.checked ? `${desain}BB@${qty}X` : `${desain}@${qty}X`;
+        
+        // Susun struktur awal
+        let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
+        
+        // Tambahkan finishing jika ada
+        if (finishing !== "") {
+            result += `_${finishing}`;
+        }
+
+        // Bersihkan spasi menjadi dash (-)
+        //const cleanResult = result.replace(/\s+/g, '-');
+
+        // Tampilkan hasil dan munculkan tombol copy
+        const display = document.getElementById('finalName');
+        display.innerText = result;
+        document.getElementById('copyBtn').style.display = 'block';
+        document.getElementById('status').style.display = 'none'; // Sembunyikan status lama
+    }
+
+    function copyToClipboard() {
+        const textToCopy = document.getElementById('finalName').innerText;
+        
+        // Fungsi modern untuk menyalin teks
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            const status = document.getElementById('status');
+            status.style.display = 'block';
+            
+            // Sembunyikan notifikasi "Berhasil" setelah 2 detik
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 2000);
+        }).catch(err => {
+            console.error('Gagal menyalin: ', err);
+            alert("Gagal menyalin teks.");
+        });
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
