@@ -72,13 +72,6 @@
         <form class="row">
             <div class="col-4 g-3 mx-3">
                 <div class="row">
-                    <div class="col-12 mb-3">
-                        <label for="noWo" class="form-label">Cetak Ulang WO</label>
-                        <input type="text" id="noWo" class="form-control" placeholder="Contoh: 100326-123">
-                        <div>
-                            <button type="button" class="my-2 btn btn-primary btn-generate" onclick="cetakWo()">Process</button>
-                        </div>
-                    </div>
                     <!-- bagian form utama -->
                     <div class="col-12 p-3 form-utama rounded-4">
                         <div class="col-12">
@@ -219,6 +212,14 @@
                 <!-- akhir bagian form lainya -->
 
             </div>
+
+            <div class="col-3 m-3">
+                <label for="noWo" class="form-label">Cetak Ulang WO</label>
+                <input type="text" id="noWo" class="form-control" placeholder="Contoh: 100326-123">
+                <div>
+                    <button type="button" class="my-2 btn btn-primary btn-generate" onclick="cetakWo()">Process</button>
+                </div>
+            </div>
         </form>
 
         <div class="col-12 my-4">
@@ -302,15 +303,39 @@
             const desain = document.getElementById('desain').value;
             const bolakbalik = document.getElementById('bolakbalik');
             const finishing = document.getElementById('finishing').value.trim();
+            let buku = "";
+            const judul = document.getElementById('judul').value.trim();
+            let jmlDesain = desain > 1 ? desain : "";
+            let jumlah = ""
 
             if (!opg || !woNama || !qty) {
                 alert("Mohon isi OPG, WO/Nama, dan Jumlah Cetak!");
                 return;
             }
-            const jumlah = bolakbalik.checked ? `${desain}BB@${qty}X` : `${desain}@${qty}X`;
-
+            if (optionCover.checked) {
+                if (!judul) {
+                    alert("Mohon isi Judul untuk opsi Buku!");
+                    return;
+                }
+                buku = `_${judul}_COVER`;
+            } else if (optionIsi.checked) {
+                if (!judul) {
+                    alert("Mohon isi Judul untuk opsi Buku!");
+                    return;
+                }
+                buku = `_${judul}_ISI`;
+            }
+            if (bolakbalik.checked) {
+                jumlah = `${desain}BB@${qty}X`;
+            } else {
+                if (jmlDesain != "") {
+                    jumlah = `${desain}@${qty}X`;
+                } else {
+                    jumlah = `${qty}X`;
+                }
+            }
             // Susun struktur awal
-            let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
+            let result = `${line}_${opg}_${woNama}${buku}_${kertas}_${jumlah}`;
 
             // Tambahkan finishing jika ada
             if (finishing !== "") {
