@@ -65,252 +65,251 @@
 
 <body>
 
-    <div class="container  p-2">
-        <div class="row text-center">
+    <div class="container-fluid px-4 py-2">
+        <div class="row mb-3 text-center">
             <h2>Renamer OPG Tools</h2>
         </div>
-        <form class="row">
-            <div class="col-4 g-3 mx-3">
+        <form class="row row-cols-2">
+            <!-- bagian form utama -->
+            <div class="col-md-3 align-self-center">
+                <div class="col p-3 form-utama rounded-4">
+                    <div class="col-sm">
+                        <label for="lineKerja" class="form-label">Line</label>
+                        <select id="lineKerja" class="form-select">
+                            <option value="DTG">DTG</option>
+                            <option value="OL">OnLine</option>
+                            <option value="CO">CORPORATE</option>
+                            <option value="S">MARKETPLACE</option>
+                            <option value="PE">EVENT</option>
+                            <option value="PE">PRIORITAS</option>
+                        </select>
+                    </div>
+                    <div class="col-sm">
+                        <label for="opg" class="form-label">Inisial OPG</label>
+                        <input type="text" id="opg" class="form-control" placeholder="Contoh: AG">
+                    </div>
+                    <div class="col-sm">
+                        <label for="woNama" class="form-label">Nomor WO & Nama Konsumen</label>
+                        <input type="text" id="woNama" class="form-control"
+                            placeholder="Contoh: 100326-123 Budi Santoso">
+                    </div>
+                </div>
+
+                <div class="row-sm pt-5">
+                    <label for="noWo" class="form-label">Cetak Ulang WO</label>
+                    <input type="text" id="noWo" class="form-control" placeholder="Contoh: 100326-123">
+                    <div>
+                        <button type="button" class="my-2 btn btn-primary btn-generate"
+                            onclick="cetakWo()">Process</button>
+                    </div>
+                </div>
+            </div>
+            <!-- bagian akhir form utama -->
+
+            <div class="col-md-9 fs-6">
                 <div class="row">
-                    <!-- bagian form utama -->
-                    <div class="col-12 p-3 form-utama rounded-4">
+                    <!-- bagian form kertas -->
+                    <div class="col m-3 p-3 form-kertas rounded-4">
+                        <div class="p-3 fw-bold mb-3">
+                            A3+
+                        </div>
+                        <div class="row g-2 row-cols-3">
+                            <div class="col">
+                                <label for="kertas" class="form-label">Jenis Kertas</label>
+                                <select id="kertas" class="form-select">
+                                    <option value="" disabled>----Art Paper----</option>
+                                    <option value="AP 100">AP 100g</option>
+                                    <option value="AP 120">AP 120g</option>
+                                    <option value="AP 150">AP 150g</option>
+                                    <option value="" disabled>----Ivory----</option>
+                                    <option value="IV 210">IV 210g</option>
+                                    <option value="IV 230">IV 230g</option>
+                                    <option value="IV 260">IV 260g</option>
+                                    <option value="IV 310">IV 310g</option>
+                                    <option value="" disabled>----Mate Paper----</option>
+                                    <option value="MP 120">MP 120g</option>
+                                    <option value="MP 150">MP 150g</option>
+                                    <option value="" disabled>----HVS----</option>
+                                    <option value="HVS 70">HVS 70g</option>
+                                    <option value="HVS 80">HVS 80g</option>
+                                    <option value="HVS 100">HVS 100g</option>
+                                    <option value="" disabled>----Book Paper----</option>
+                                    <option value="BP 57">BP 57g</option>
+                                    <option value="BP 70">BP 70g</option>
+                                    <option value="" disabled>----other----</option>
+                                    <option value="KRUNGKUT">KRUNGKUT</option>
+                                    <option value="BC-THIK">BC THIK</option>
+                                    <option value="LINEN">LINEN</option>
+                                    <option value="JASMIN-WHITE">JASMIN WHITE</option>
+                                    <option value="JASMIN-GOLD">JASMIN GOLD</option>
+                                    <option value="LIME">LIME</option>
+                                    <option value="LMO">LMO</option>
+                                    <option value="" disabled>----STICKER----</option>
+                                    <option value="CROMO">CROMO</option>
+                                    <option value="TRANSPARANT">TRANSPARANT</option>
+                                    <option value="VINYL-MATTE">VINYL MATTE</option>
+                                    <option value="VINYL-GLOSSY">VINYL GLOSSY</option>
+                                </select>
+                            </div>
+                            <div class="col"></div>
+                            <div class="col"></div>
+                            <div class="col">
+                                <label for="desain" class="form-label">Jumlah Desain</label>
+                                <input type="number" id="desain" class="form-control" placeholder="1" value="1" min="1">
+                            </div>
+                            <div class="col form-check">
+                                <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
+                                <label class="form-check-label" for="bolakbalik">
+                                    2 muka
+                                </label>
+                            </div>
+                            <div class="col">
+                                <label for="qty" class="form-label">Jumlah Cetak</label>
+                                <input type="number" id="qty" class="form-control" placeholder="1" value="1" min="1">
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12 my-3 ms-2">
+                            <small class="text-muted">(Opsional)</small>
+                        </div>
+                        <div class="col-md-12 my-3">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-6 ">
+                                        <label for="judul" class="form-label">Judul</label>
+                                        <input type="text" id="judul" class="form-control fst-italic"
+                                            placeholder="Black Mirror">
+                                    </div>
+                                    <div class="col-4">
+                                        <label class="fw-bold mx-2">Buku</label>
+                                        <div class="form-check form-switch" role="group">
+                                            <input type="checkbox" class="form-check-input" name="options-base"
+                                                id="option_cover" autocomplete="off">
+                                            <label class="form-check-label" for="option_cover">Cover</label>
+                                        </div>
+                                        <div class="form-check form-switch" role="group">
+                                            <input type="checkbox" class="form-check-input" name="options-base"
+                                                id="option_isi" autocomplete="off">
+                                            <label class="form-check-label" for="option_isi">Isi</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 my-3">
+                            <label for="finishing" class="form-label">Finishing</label>
+                            <input type="text" id="finishing" class="form-control" placeholder="Contoh: Laminasi-Doff">
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <small class="text-muted my-3">Pastikan semua data sudah benar sebelum menekan tombol
+                                PROSES.</small>
+                            <div>
+                                <button type="button" class="my-2 btn btn-primary btn-generate"
+                                    onclick="generateKertas()">PROSES</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- akhir bagian form kertas -->
+
+
+                    <!-- bagian form outdoor -->
+                    <div class="col m-3 p-3 form-outdoor rounded-4">
+                        <div class="p-3 fw-bold mb-3">
+                            Outdoor
+                        </div>
                         <div class="col-12">
-                            <label for="lineKerja" class="form-label">Line</label>
-                            <select id="lineKerja" class="form-select">
-                                <option value="DTG">DTG</option>
-                                <option value="OL">OL</option>
-                                <option value="CO">CO</option>
-                                <option value="S">MARKETPLACE</option>
-                                <option value="PE">EVENT</option>
-                                <option value="PE">PRIORITAS</option>
+                            <label for="kertas" class="form-label">Bahan</label>
+                            <select id="kertas" class="form-select">
+                                <option value="" disabled>----ECO BANNER----</option>
+                                <option value="ECO 280">ECO 280</option>
+                                <option value="" disabled>----STANDART----</option>
+                                <option value="STD 340">ECO 300</option>
+                                <option value="" disabled>----SUPER----</option>
+                                <option value="SUPER 440-GLOSSY">SUPER 440-GLOSSY</option>
+                                <option value="SUPER 440-MATTE">SUPER 440-MATTE</option>
                             </select>
                         </div>
-                        <div class="col-md-6">
-                            <label for="opg" class="form-label">Inisial OPG</label>
-                            <input type="text" id="opg" class="form-control" placeholder="Contoh: AG">
-                        </div>
-                        <div class="col-12">
-                            <label for="woNama" class="form-label">Nomor WO & Nama Konsumen</label>
-                            <input type="text" id="woNama" class="form-control"
-                                placeholder="Contoh: 100326-123 Budi Santoso">
-                        </div>
-                    </div>
-                    <!-- bagian akhir form utama -->
-                     <div class="col-12">
-                        <label for="noWo" class="form-label">Cetak Ulang WO</label>
-                        <input type="text" id="noWo" class="form-control" placeholder="Contoh: 100326-123">
-                        <div>
-                            <button type="button" class="my-2 btn btn-primary btn-generate" onclick="cetakWo()">Process</button>
-                        </div>
-                     </div>
-                </div>
-            </div>
-
-            <div class="col-4 g-3">
-                <!-- bagian form kertas -->
-                <div class="col-12 p-3 form-kertas rounded-4">
-                    <div class="p-3 fw-bold mb-3">
-                        A3+
-                    </div>
-                    <div class="col-md-6">
-                        <label for="kertas" class="form-label">Jenis Kertas</label>
-                        <select id="kertas" class="form-select">
-                            <option value="" disabled>----Art Paper----</option>
-                            <option value="AP 100">AP 100g</option>
-                            <option value="AP 120">AP 120g</option>
-                            <option value="AP 150">AP 150g</option>
-                            <option value="" disabled>----Ivory----</option>
-                            <option value="IV 210">IV 210g</option>
-                            <option value="IV 230">IV 230g</option>
-                            <option value="IV 260">IV 260g</option>
-                            <option value="IV 310">IV 310g</option>
-                            <option value="" disabled>----Mate Paper----</option>
-                            <option value="MP 120">MP 120g</option>
-                            <option value="MP 150">MP 150g</option>
-                            <option value="" disabled>----HVS----</option>
-                            <option value="HVS 70">HVS 70g</option>
-                            <option value="HVS 80">HVS 80g</option>
-                            <option value="HVS 100">HVS 100g</option>
-                            <option value="" disabled>----Book Paper----</option>
-                            <option value="BP 57">BP 57g</option>
-                            <option value="BP 70">BP 70g</option>
-                            <option value="" disabled>----other----</option>
-                            <option value="KRUNGKUT">KRUNGKUT</option>
-                            <option value="BC-THIK">BC THIK</option>
-                            <option value="LINEN">LINEN</option>
-                            <option value="JASMIN-WHITE">JASMIN WHITE</option>
-                            <option value="JASMIN-GOLD">JASMIN GOLD</option>
-                            <option value="LIME">LIME</option>
-                            <option value="LMO">LMO</option>
-                            <option value="" disabled>----STICKER----</option>
-                            <option value="CROMO">CROMO</option>
-                            <option value="TRANSPARANT">TRANSPARANT</option>
-                            <option value="VINYL-MATTE">VINYL MATTE</option>
-                            <option value="VINYL-GLOSSY">VINYL GLOSSY</option>
-                        </select>
-                    </div>
-                    <div class="container my-3">
-                        <div class="row">
-                            <div class="col-4">
-                                <label for="desain" class="form-label">Jumlah Desain</label>
-                                <input type="number" id="desain" class="form-control" placeholder="1" value="1" min="1">
-                            </div>
-                            <div class="col-2 form-check">
-                                <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
-                                <label class="form-check-label" for="bolakbalik">
-                                    2 muka
-                                </label>
-                            </div>
-                            <div class="col-4">
-                                <label for="qty" class="form-label">Jumlah Cetak</label>
-                                <input type="number" id="qty" class="form-control" placeholder="1" value="1" min="1">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-3 ms-2">
-                        <small class="text-muted">(Opsional)</small>
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <div class="container">
+                        <div class="container my-3">
                             <div class="row">
-                                <div class="col-6 ">
-                                    <label for="judul" class="form-label">Judul</label>
-                                    <input type="text" id="judul" class="form-control fst-italic"
-                                        placeholder="Black Mirror">
+                                <div class="col-4">
+                                    <label for="desain" class="form-label">Jumlah Desain</label>
+                                    <input type="number" id="desain" class="form-control" placeholder="1" value="1"
+                                        min="1">
+                                </div>
+                                <div class="col-2 form-check">
+                                    <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
+                                    <label class="form-check-label" for="bolakbalik">
+                                        2 muka
+                                    </label>
                                 </div>
                                 <div class="col-4">
-                                    <label class="fw-bold mx-2">Buku</label>
-                                    <div class="form-check form-switch" role="group">
-                                        <input type="checkbox" class="form-check-input" name="options-base"
-                                            id="option_cover" autocomplete="off">
-                                        <label class="form-check-label" for="option_cover">Cover</label>
+                                    <label for="qty" class="form-label">Jumlah Cetak</label>
+                                    <input type="number" id="qty" class="form-control" placeholder="1" value="1"
+                                        min="1">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 my-3 ms-2">
+                            <small class="text-muted">(Opsional)</small>
+                        </div>
+                        <div class="col-md-12 my-3">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-6 ">
+                                        <label for="judul" class="form-label">Judul</label>
+                                        <input type="text" id="judul" class="form-control fst-italic"
+                                            placeholder="Black Mirror">
                                     </div>
-                                    <div class="form-check form-switch" role="group">
-                                        <input type="checkbox" class="form-check-input" name="options-base"
-                                            id="option_isi" autocomplete="off">
-                                        <label class="form-check-label" for="option_isi">Isi</label>
+                                    <div class="col-4">
+                                        <label class="fw-bold mx-2">Buku</label>
+                                        <div class="form-check form-switch" role="group">
+                                            <input type="checkbox" class="form-check-input" name="options-base"
+                                                id="option_cover" autocomplete="off">
+                                            <label class="form-check-label" for="option_cover">Cover</label>
+                                        </div>
+                                        <div class="form-check form-switch" role="group">
+                                            <input type="checkbox" class="form-check-input" name="options-base"
+                                                id="option_isi" autocomplete="off">
+                                            <label class="form-check-label" for="option_isi">Isi</label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-12 my-3">
+                            <label for="finishing" class="form-label">Finishing</label>
+                            <input type="text" id="finishing" class="form-control" placeholder="Contoh: Laminasi-Doff">
+                        </div>
+                        <div class="col-md-12 text-center">
+                            <small class="text-muted my-3">Pastikan semua data sudah benar sebelum menekan tombol
+                                PROSES.</small>
+                            <div>
+                                <button type="button" class="my-2 btn btn-primary btn-generate"
+                                    onclick="generateKertas()">PROSES</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-12 my-3">
-                        <label for="finishing" class="form-label">Finishing</label>
-                        <input type="text" id="finishing" class="form-control" placeholder="Contoh: Laminasi-Doff">
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <small class="text-muted my-3">Pastikan semua data sudah benar sebelum menekan tombol
-                            PROSES.</small>
-                        <div>
-                            <button type="button" class="my-2 btn btn-primary btn-generate"
-                                onclick="generateKertas()">PROSES</button>
+                    <!-- akhir bagian form outdoor -->
+                </div>
+                <div class="row m-2">
+                    <div class="card items-center">
+                        <div class="card-header">
+                            Hasil Nama File
+                        </div>
+                        <div class="card-body">
+                            <div class="result-box">
+                                <span id="finalName">Hasil akan muncul di sini...</span>
+                                <button type="button" id="copyBtn" class="btn btn-primary btn-copy"
+                                    onclick="copyToClipboard()">Salin Nama File</button>
+                                <div id="status" class="status-msg">Berhasil disalin! ✅</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!-- akhir bagian form kertas -->
-
-                <!-- bagian form lainya -->
-                <div class="col-12 form-lainya" style="display: none;">
-                </div>
-                <!-- akhir bagian form lainya -->
-
-            </div>
-
-            <div class="col-3 m-3">
-                <!-- bagian form outdoor -->
-                <div class="col-12 p-3 form-outdoor rounded-4">
-                    <div class="p-3 fw-bold mb-3">
-                        Outdoor
-                    </div>
-                    <div class="col-12">
-                        <label for="kertas" class="form-label">Bahan</label>
-                        <select id="kertas" class="form-select">
-                            <option value="" disabled>----ECO BANNER----</option>
-                            <option value="ECO 280">ECO 280</option>
-                            <option value="" disabled>----STANDART----</option>
-                            <option value="STD 340">ECO 300</option>
-                            <option value="" disabled>----SUPER----</option>
-                            <option value="SUPER 440-GLOSSY">SUPER 440-GLOSSY</option>
-                            <option value="SUPER 440-MATTE">SUPER 440-MATTE</option>
-                        </select>
-                    </div>
-                    <div class="container my-3">
-                        <div class="row">
-                            <div class="col-4">
-                                <label for="desain" class="form-label">Jumlah Desain</label>
-                                <input type="number" id="desain" class="form-control" placeholder="1" value="1" min="1">
-                            </div>
-                            <div class="col-2 form-check">
-                                <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
-                                <label class="form-check-label" for="bolakbalik">
-                                    2 muka
-                                </label>
-                            </div>
-                            <div class="col-4">
-                                <label for="qty" class="form-label">Jumlah Cetak</label>
-                                <input type="number" id="qty" class="form-control" placeholder="1" value="1" min="1">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-3 ms-2">
-                        <small class="text-muted">(Opsional)</small>
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-6 ">
-                                    <label for="judul" class="form-label">Judul</label>
-                                    <input type="text" id="judul" class="form-control fst-italic"
-                                        placeholder="Black Mirror">
-                                </div>
-                                <div class="col-4">
-                                    <label class="fw-bold mx-2">Buku</label>
-                                    <div class="form-check form-switch" role="group">
-                                        <input type="checkbox" class="form-check-input" name="options-base"
-                                            id="option_cover" autocomplete="off">
-                                        <label class="form-check-label" for="option_cover">Cover</label>
-                                    </div>
-                                    <div class="form-check form-switch" role="group">
-                                        <input type="checkbox" class="form-check-input" name="options-base"
-                                            id="option_isi" autocomplete="off">
-                                        <label class="form-check-label" for="option_isi">Isi</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-12 my-3">
-                        <label for="finishing" class="form-label">Finishing</label>
-                        <input type="text" id="finishing" class="form-control" placeholder="Contoh: Laminasi-Doff">
-                    </div>
-                    <div class="col-md-12 text-center">
-                        <small class="text-muted my-3">Pastikan semua data sudah benar sebelum menekan tombol
-                            PROSES.</small>
-                        <div>
-                            <button type="button" class="my-2 btn btn-primary btn-generate"
-                                onclick="generateKertas()">PROSES</button>
-                        </div>
-                    </div>
-                </div>
-                <!-- akhir bagian form outdoor -->
             </div>
         </form>
 
-        <div class="col-12 my-4">
-            <div class="card items-center">
-                <div class="card-header">
-                    Hasil Nama File
-                </div>
-                <div class="card-body">
-                    <div class="result-box">
-                        <span id="finalName">Hasil akan muncul di sini...</span>
-                        <button type="button" id="copyBtn" class="btn btn-primary btn-copy"
-                            onclick="copyToClipboard()">Salin Nama File</button>
-                        <div id="status" class="status-msg">Berhasil disalin! ✅</div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
