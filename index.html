@@ -7,6 +7,8 @@
     <title>Renamer File</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <style>
         .result-box {
             margin-top: 25px;
@@ -104,12 +106,13 @@
                     </div>
                 </div>
 
-                //buat form untuk get barcode dari file .txt, berisi tabel, dengan value nomor kode barcode. ip yang digunakan"http://api.qrserver.com/v1/create-qr-code/?data=KODEBARCODE&size=300x300"
+                
                 <div class="row-sm pt-5">
                     <label for="barcodeFile" class="form-label">Upload File TXT Barcode</label>
                     <input type="file" id="barcodeFile" class="form-control" accept=".txt">
                     <div>
                         <button type="button" class="my-2 btn btn-primary btn-generate" onclick="processBarcode()">Process</button>
+                        <button type="button" class="my-2 btn btn-success" onclick="downloadQRCodeZip()" id="downloadQRBtn" style="display:none;">📥 Download QR Codes (ZIP)</button>
                     </div>
                     <div id="barcodeTable" class="mt-3" style="display:none;">
                         <table class="table table-striped">
@@ -126,6 +129,58 @@
                     </div>
                 </div>
 
+                <!-- Bagian Batch QR Codes Download -->
+                <div class="row-sm pt-5 border-top">
+                    <label class="form-label fw-bold mt-3">Batch QR Codes Download</label>
+                    <small class="text-muted d-block mb-2">Upload multiple file TXT barcode untuk download semua QR codes dalam satu ZIP</small>
+                    <label for="multipleBarcodeFiles" class="form-label">Upload Multiple File TXT</label>
+                    <input type="file" id="multipleBarcodeFiles" class="form-control" accept=".txt" multiple>
+                    <div>
+                        <button type="button" class="my-2 btn btn-info btn-generate" onclick="processMulipleBarcode()">Preview Files</button>
+                        <button type="button" class="my-2 btn btn-success" onclick="downloadMultipleBarcodeQR()" id="downloadMultipleQRBtn" style="display:none;">📥 Download All QR Codes (ZIP)</button>
+                    </div>
+                    <div id="multipleQRResultsTable" class="mt-3" style="display:none;">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Total Barcode</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="multipleQRTableBody">
+                            </tbody>
+                        </table>
+                        <small class="text-muted d-block mt-2">Total QR Codes: <span id="totalQRCount">0</span></small>
+                    </div>
+                </div>
+
+                <!-- Bagian Batch Download -->
+                <div class="row-sm pt-5 border-top">
+                    <label class="form-label fw-bold mt-3">Batch Download</label>
+                    <label for="batchFile" class="form-label">Upload File CSV/TXT Batch</label>
+                    <small class="text-muted d-block mb-2">Format: Line|OPG|WO-Nama|Kertas|Jml Desain|Double|Qty|Finishing (satu per baris atau dari CSV)</small>
+                    <input type="file" id="batchFile" class="form-control" accept=".csv,.txt">
+                    <div>
+                        <button type="button" class="my-2 btn btn-info btn-generate" onclick="processBatch()">Preview Batch</button>
+                        <button type="button" class="my-2 btn btn-success" onclick="downloadBatchResults()" id="downloadBatchBtn" style="display:none;">Download Hasil (CSV)</button>
+                    </div>
+                    <div id="batchResultsTable" class="mt-3" style="display:none;">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama File</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batchTableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- tambahkan untuk mendownload batch QR codes -->
                 <script>
                     function processBarcode() {
                         const fileInput = document.getElementById('barcodeFile');
@@ -158,8 +213,338 @@
                             });
                             
                             document.getElementById('barcodeTable').style.display = 'table';
+                            document.getElementById('downloadQRBtn').style.display = 'inline-block';
                         };
                         reader.readAsText(file);
+                    }
+
+                    // Menyimpan data barcode untuk download
+                    let barcodeDataList = [];
+
+                    function downloadQRCodeZip() {
+                        const tableBody = document.getElementById('tableBody');
+                        const rows = tableBody.querySelectorAll('tr');
+                        
+                        if (rows.length === 0) {
+                            alert('Tidak ada data untuk didownload!');
+                            return;
+                        }
+
+                        const downloadBtn = event.target;
+                        const originalText = downloadBtn.innerText;
+                        downloadBtn.innerText = 'Sedang diproses...';
+                        downloadBtn.disabled = true;
+
+                        const zip = new JSZip();
+                        let processedCount = 0;
+                        let totalCount = rows.length;
+
+                        // Fetch dan tambahkan setiap QR code ke ZIP
+                        rows.forEach((row, index) => {
+                            const cells = row.querySelectorAll('td');
+                            const barcode = cells[1].innerText;
+                            const qrUrl = cells[2].querySelector('img').src;
+                            
+                            // Fetch gambar QR code
+                            fetch(qrUrl)
+                                .then(response => response.blob())
+                                .then(blob => {
+                                    // Tambahkan gambar ke ZIP
+                                    zip.file(`QR_${barcode}.png`, blob);
+                                    processedCount++;
+                                    
+                                    // Jika semua selesai diproses, generate ZIP
+                                    if (processedCount === totalCount) {
+                                        zip.generateAsync({type: 'blob'})
+                                            .then(content => {
+                                                saveAs(content, `QR_Codes_${new Date().toISOString().slice(0, 10)}.zip`);
+                                                alert(`${totalCount} QR Code berhasil didownload sebagai ZIP!`);
+                                                downloadBtn.innerText = originalText;
+                                                downloadBtn.disabled = false;
+                                            })
+                                            .catch(err => {
+                                                console.error('Error creating ZIP:', err);
+                                                alert('Gagal membuat file ZIP. Silakan coba lagi.');
+                                                downloadBtn.innerText = originalText;
+                                                downloadBtn.disabled = false;
+                                            });
+                                    }
+                                })
+                                .catch(err => {
+                                    console.error('Error fetching QR code:', err);
+                                    processedCount++;
+                                    
+                                    // Jika error, lanjutkan dengan QR code yang berhasil
+                                    if (processedCount === totalCount) {
+                                        if (processedCount > 0) {
+                                            zip.generateAsync({type: 'blob'})
+                                                .then(content => {
+                                                    saveAs(content, `QR_Codes_${new Date().toISOString().slice(0, 10)}.zip`);
+                                                    alert(`${processedCount - 1} dari ${totalCount} QR Code berhasil didownload sebagai ZIP!`);
+                                                    downloadBtn.innerText = originalText;
+                                                    downloadBtn.disabled = false;
+                                                });
+                                        }
+                                    }
+                                });
+                        });
+                    }
+
+                    // Batch Processing Variables
+                    let batchResults = [];
+
+                    // Variables untuk multiple barcode files
+                    let multipleBarcodesData = [];
+
+                    function processMulipleBarcode() {
+                        const fileInputs = document.getElementById('multipleBarcodeFiles').files;
+                        
+                        if (fileInputs.length === 0) {
+                            alert('Pilih minimal satu file TXT terlebih dahulu!');
+                            return;
+                        }
+
+                        const tableBody = document.getElementById('multipleQRTableBody');
+                        tableBody.innerHTML = '';
+                        multipleBarcodesData = [];
+                        let totalBarcode = 0;
+                        let filesProcessed = 0;
+
+                        Array.from(fileInputs).forEach((file, fileIndex) => {
+                            const reader = new FileReader();
+                            reader.onload = function(e) {
+                                const text = e.target.result;
+                                const lines = text.trim().split('\n');
+                                const barcodes = lines.filter(line => line.trim().length > 0);
+                                
+                                if (barcodes.length > 0) {
+                                    multipleBarcodesData.push({
+                                        fileName: file.name,
+                                        barcodes: barcodes
+                                    });
+                                    
+                                    totalBarcode += barcodes.length;
+                                    
+                                    const row = document.createElement('tr');
+                                    row.innerHTML = `
+                                        <td>${file.name}</td>
+                                        <td>${barcodes.length}</td>
+                                        <td><span class="badge bg-success">✓ Valid</span></td>
+                                    `;
+                                    tableBody.appendChild(row);
+                                }
+                                
+                                filesProcessed++;
+                                if (filesProcessed === fileInputs.length) {
+                                    if (totalBarcode > 0) {
+                                        document.getElementById('totalQRCount').innerText = totalBarcode;
+                                        document.getElementById('multipleQRResultsTable').style.display = 'table';
+                                        document.getElementById('downloadMultipleQRBtn').style.display = 'inline-block';
+                                    } else {
+                                        alert('Tidak ada barcode valid ditemukan di file!');
+                                    }
+                                }
+                            };
+                            reader.readAsText(file);
+                        });
+                    }
+
+                    function downloadMultipleBarcodeQR() {
+                        if (multipleBarcodesData.length === 0) {
+                            alert('Tidak ada data untuk didownload!');
+                            return;
+                        }
+
+                        const downloadBtn = event.target;
+                        const originalText = downloadBtn.innerText;
+                        downloadBtn.innerText = 'Sedang diproses...';
+                        downloadBtn.disabled = true;
+
+                        const zip = new JSZip();
+                        let processedCount = 0;
+                        let totalQRCount = 0;
+                        let errorCount = 0;
+
+                        // Hitung total QR codes
+                        multipleBarcodesData.forEach(data => {
+                            totalQRCount += data.barcodes.length;
+                        });
+
+                        // Buat folder untuk setiap file dan tambahkan QR codes
+                        multipleBarcodesData.forEach((fileData, fileIndex) => {
+                            const folderName = fileData.fileName.replace(/\.[^.]+$/, ''); // Remove extension
+                            
+                            fileData.barcodes.forEach((barcode, barcodeIndex) => {
+                                const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(barcode.trim())}&size=300x300`;
+                                
+                                fetch(qrUrl)
+                                    .then(response => response.blob())
+                                    .then(blob => {
+                                        // Tambahkan gambar ke ZIP dalam folder
+                                        zip.file(`${folderName}/QR_${barcode.trim()}.png`, blob);
+                                        processedCount++;
+                                        
+                                        // Update progress
+                                        downloadBtn.innerText = `Memproses... ${processedCount}/${totalQRCount}`;
+                                        
+                                        if (processedCount === totalQRCount) {
+                                            completeMultipleQRDownload(zip, downloadBtn, originalText, totalQRCount);
+                                        }
+                                    })
+                                    .catch(err => {
+                                        console.error('Error fetching QR code:', err);
+                                        errorCount++;
+                                        processedCount++;
+                                        
+                                        if (processedCount === totalQRCount) {
+                                            completeMultipleQRDownload(zip, downloadBtn, originalText, totalQRCount - errorCount);
+                                        }
+                                    });
+                            });
+                        });
+                    }
+
+                    function completeMultipleQRDownload(zip, downloadBtn, originalText, successCount) {
+                        zip.generateAsync({type: 'blob'})
+                            .then(content => {
+                                saveAs(content, `QR_Codes_Batch_${new Date().toISOString().slice(0, 10)}.zip`);
+                                alert(`${successCount} QR Code dari ${multipleBarcodesData.length} file berhasil didownload sebagai ZIP!`);
+                                downloadBtn.innerText = originalText;
+                                downloadBtn.disabled = false;
+                            })
+                            .catch(err => {
+                                console.error('Error creating ZIP:', err);
+                                alert('Gagal membuat file ZIP. Silakan coba lagi.');
+                                downloadBtn.innerText = originalText;
+                                downloadBtn.disabled = false;
+                            });
+                    }
+
+                    function processBatch() {
+                        const fileInput = document.getElementById('batchFile');
+                        const file = fileInput.files[0];
+                        
+                        if (!file) {
+                            alert('Pilih file CSV/TXT batch terlebih dahulu!');
+                            return;
+                        }
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const text = e.target.result;
+                            const lines = text.trim().split('\n');
+                            const tableBody = document.getElementById('batchTableBody');
+                            tableBody.innerHTML = '';
+                            batchResults = [];
+                            
+                            lines.forEach((line, index) => {
+                                const data = line.trim();
+                                if (data && data.length > 0) {
+                                    try {
+                                        let parts;
+                                        // Deteksi format CSV atau pipe-separated
+                                        if (data.includes(',')) {
+                                            parts = data.split(',').map(p => p.trim());
+                                        } else {
+                                            parts = data.split('|').map(p => p.trim());
+                                        }
+                                        
+                                        if (parts.length >= 3) {
+                                            // Format: Line|OPG|WO-Nama|Kertas|Jml Desain|Double|Qty|Finishing
+                                            const line = parts[0] || '';
+                                            const opg = parts[1] || '';
+                                            const woNama = parts[2] || '';
+                                            const kertas = parts[3] || '';
+                                            const desain = parts[4] || '1';
+                                            const bolakbalik = parts[5] === 'true' || parts[5] === '1' ? 'BB' : '';
+                                            const qty = parts[6] || '1';
+                                            const finishing = parts[7] || '';
+                                            
+                                            // Generate nama file
+                                            let fileName = generateFileName(line, opg, woNama, kertas, desain, bolakbalik, qty, finishing);
+                                            
+                                            const row = document.createElement('tr');
+                                            row.innerHTML = `
+                                                <td>${index + 1}</td>
+                                                <td>${fileName}</td>
+                                                <td><span class="badge bg-success">✓ Valid</span></td>
+                                            `;
+                                            tableBody.appendChild(row);
+                                            
+                                            batchResults.push({
+                                                no: index + 1,
+                                                fileName: fileName,
+                                                line: line,
+                                                opg: opg,
+                                                woNama: woNama,
+                                                kertas: kertas,
+                                                desain: desain,
+                                                bolakbalik: bolakbalik,
+                                                qty: qty,
+                                                finishing: finishing
+                                            });
+                                        }
+                                    } catch (err) {
+                                        console.error('Error parsing line:', err);
+                                    }
+                                }
+                            });
+                            
+                            if (batchResults.length > 0) {
+                                document.getElementById('batchResultsTable').style.display = 'table';
+                                document.getElementById('downloadBatchBtn').style.display = 'inline-block';
+                            } else {
+                                alert('Tidak ada data valid ditemukan di file!');
+                            }
+                        };
+                        reader.readAsText(file);
+                    }
+
+                    function generateFileName(line, opg, woNama, kertas, desain, bolakbalik, qty, finishing) {
+                        let jmlDesain = desain > 1 ? desain : '';
+                        let jumlah = '';
+                        
+                        if (bolakbalik === 'BB') {
+                            jumlah = `${desain}BB@${qty}X`;
+                        } else {
+                            if (jmlDesain !== '') {
+                                jumlah = `${desain}@${qty}X`;
+                            } else {
+                                jumlah = `${qty}X`;
+                            }
+                        }
+                        
+                        let result = `${line}_${opg}_${woNama}_${kertas}_${jumlah}`;
+                        
+                        if (finishing !== '') {
+                            result += `_${finishing}`;
+                        }
+                        
+                        return result;
+                    }
+
+                    function downloadBatchResults() {
+                        if (batchResults.length === 0) {
+                            alert('Tidak ada hasil untuk didownload!');
+                            return;
+                        }
+
+                        // Buat CSV content
+                        let csv = 'No,Line,OPG,WO-Nama,Kertas,Jml Desain,Double,Qty,Finishing,Nama File\n';
+                        
+                        batchResults.forEach(result => {
+                            csv += `${result.no},"${result.line}","${result.opg}","${result.woNama}","${result.kertas}",${result.desain},"${result.bolakbalik}",${result.qty},"${result.finishing}","${result.fileName}"\n`;
+                        });
+
+                        // Download CSV
+                        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement('a');
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `batch_hasil_${new Date().toISOString().slice(0, 10)}.csv`;
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        
+                        alert(`${batchResults.length} hasil batch berhasil didownload sebagai CSV!`);
                     }
                 </script>
             <!-- bagian akhir form utama -->
