@@ -103,7 +103,65 @@
                             onclick="cetakWo()">Process</button>
                     </div>
                 </div>
-            </div>
+
+                //buat form untuk get barcode dari file .txt, berisi tabel, dengan value nomor kode barcode. ip yang digunakan"http://api.qrserver.com/v1/create-qr-code/?data=KODEBARCODE&size=300x300"
+                <div class="row-sm pt-5">
+                    <label for="barcodeFile" class="form-label">Upload File TXT Barcode</label>
+                    <input type="file" id="barcodeFile" class="form-control" accept=".txt">
+                    <div>
+                        <button type="button" class="my-2 btn btn-primary btn-generate" onclick="processBarcode()">Process</button>
+                    </div>
+                    <div id="barcodeTable" class="mt-3" style="display:none;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Kode Barcode</th>
+                                    <th>QR Code</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <script>
+                    function processBarcode() {
+                        const fileInput = document.getElementById('barcodeFile');
+                        const file = fileInput.files[0];
+                        
+                        if (!file) {
+                            alert('Pilih file TXT terlebih dahulu!');
+                            return;
+                        }
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const text = e.target.result;
+                            const lines = text.trim().split('\n');
+                            const tableBody = document.getElementById('tableBody');
+                            tableBody.innerHTML = '';
+                            
+                            lines.forEach((line, index) => {
+                                const barcode = line.trim();
+                                if (barcode) {
+                                    const row = document.createElement('tr');
+                                    const qrUrl = `http://api.qrserver.com/v1/create-qr-code/?data=${barcode}&size=300x300`;
+                                    row.innerHTML = `
+                                        <td>${index + 1}</td>
+                                        <td>${barcode}</td>
+                                        <td><img src="${qrUrl}" alt="QR" style="width:100px;height:100px;"></td>
+                                    `;
+                                    tableBody.appendChild(row);
+                                }
+                            });
+                            
+                            document.getElementById('barcodeTable').style.display = 'table';
+                        };
+                        reader.readAsText(file);
+                    }
+                </script>
             <!-- bagian akhir form utama -->
 
             <div class="col-md-9 fs-6">
@@ -219,33 +277,40 @@
                             Outdoor
                         </div>
                         <div class="col-12">
-                            <label for="kertas" class="form-label">Bahan</label>
-                            <select id="kertas" class="form-select">
+                            <label for="bahanOd" class="form-label">Bahan</label>
+                            <select id="bahanOd" class="form-select">
                                 <option value="" disabled>----ECO BANNER----</option>
                                 <option value="ECO 280">ECO 280</option>
                                 <option value="" disabled>----STANDART----</option>
-                                <option value="STD 340">ECO 300</option>
+                                <option value="STD 340">STANDART 340</option>
                                 <option value="" disabled>----SUPER----</option>
                                 <option value="SUPER 440-GLOSSY">SUPER 440-GLOSSY</option>
                                 <option value="SUPER 440-MATTE">SUPER 440-MATTE</option>
+                                <option value="" disabled>----OTHER----</option>
+                                <option value="BACKLITE">BACKLIT</option>
+                                <option value="SATIN">SATIN</option>
+                                <option value="" disabled>----STICKER----</option>
+                                <option value="RITRAMA-GLOSSY">RITRAMA GLOSSY</option>
+                                <option value="RITRAMA-DOFF">RITRAMA DOFF</option>
+                                <option value="ONE-WAY">ONE-WAY</option>
                             </select>
                         </div>
                         <div class="container my-3">
                             <div class="row">
                                 <div class="col-4">
-                                    <label for="desain" class="form-label">Jumlah Desain</label>
-                                    <input type="number" id="desain" class="form-control" placeholder="1" value="1"
-                                        min="1">
-                                </div>
-                                <div class="col-2 form-check">
-                                    <input class="form-check-input" type="checkbox" value="BB" id="bolakbalik">
-                                    <label class="form-check-label" for="bolakbalik">
-                                        2 muka
-                                    </label>
+                                    <label for="finishingOd" class="form-label">Finishing</label>
+                                    <select id="finishingOd" class="form-select">
+                                        <option value="SIMPRES KEPO">SIMPRESS KELING POJOK</option>
+                                        <option value="SIMPRES">SIMPRESS GAMBAR</option>
+                                        <option value="SIMPUT KEPO">SIMPUT KELING POJOK</option>
+                                        <option value="SIMPUT">SIMPUT</option>
+                                        <option value="SIBA">SISA BAHAN</option>
+                                        <option value="KOLONG">SISA BAHAN</option>
+                                    </select>
                                 </div>
                                 <div class="col-4">
-                                    <label for="qty" class="form-label">Jumlah Cetak</label>
-                                    <input type="number" id="qty" class="form-control" placeholder="1" value="1"
+                                    <label for="qtyOd" class="form-label">Jumlah Cetak</label>
+                                    <input type="number" id="qtyOd" class="form-control" placeholder="1" value="1"
                                         min="1">
                                 </div>
                             </div>
@@ -257,12 +322,12 @@
                             <div class="container">
                                 <div class="row">
                                     <div class="col-6 ">
-                                        <label for="judul" class="form-label">Judul</label>
-                                        <input type="text" id="judul" class="form-control fst-italic"
+                                        <label for="judulOd" class="form-label">Judul</label>
+                                        <input type="text" id="judulOd" class="form-control fst-italic"
                                             placeholder="Black Mirror">
                                     </div>
                                     <div class="col-4">
-                                        <label class="fw-bold mx-2">Buku</label>
+                                        <label class="fw-bold mx-2">-</label>
                                         <div class="form-check form-switch" role="group">
                                             <input type="checkbox" class="form-check-input" name="options-base"
                                                 id="option_cover" autocomplete="off">
@@ -278,15 +343,15 @@
                             </div>
                         </div>
                         <div class="col-md-12 my-3">
-                            <label for="finishing" class="form-label">Finishing</label>
-                            <input type="text" id="finishing" class="form-control" placeholder="Contoh: Laminasi-Doff">
+                            <label for="requestPackingOd" class="form-label">Request Packing</label>
+                            <input type="text" id="requestPackingOd" class="form-control" placeholder="Contoh: Digulung">
                         </div>
                         <div class="col-md-12 text-center">
                             <small class="text-muted my-3">Pastikan semua data sudah benar sebelum menekan tombol
                                 PROSES.</small>
                             <div>
                                 <button type="button" class="my-2 btn btn-primary btn-generate"
-                                    onclick="generateKertas()">PROSES</button>
+                                    onclick="generateBanner()">PROSES</button>
                             </div>
                         </div>
                     </div>
@@ -363,6 +428,23 @@
             }
             window.open(`http://192.168.2.21/cetak_ulang?no_wo=${woValue}`, '_blank');
         }
+
+        
+        function generateBanner() {
+
+            // nilai umum
+            const line = document.getElementById('lineKerja').value;
+            const opg = document.getElementById('opg').value.trim();
+            const woNama = document.getElementById('woNama').value.trim();
+
+            // nilai outdoor
+            const bahanOd = document.getElementById('bahanOd').value;
+            const qtyOd = document.getElementById('qtyOd').value;
+            const finishingOd = document.getElementById('finishingOd').value.trim();
+            const judulOd = document.getElementById('judulOd').value.trim();
+            const requestPackingOd = document.getElementById('requestPackingOd').value.trim();
+        }
+
         function generateKertas() {
 
             // nilai umum
