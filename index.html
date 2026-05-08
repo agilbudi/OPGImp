@@ -133,6 +133,8 @@
                             onclick="cetakWo()">Process</button>
                     </div>
                 </div>
+            </div>
+            
 
             <!-- bagian akhir form utama -->
 
@@ -369,28 +371,6 @@
         });
 
 
-        optionA3.addEventListener('change', updateFormDisplay);
-        optionOutdoor.addEventListener('change', updateFormDisplay);
-        optionLainya.addEventListener('change', updateFormDisplay);
-
-        updateFormDisplay();
-
-        function updateFormDisplay() {
-            if (optionA3.checked) {
-                formKertas.style.display = 'block';
-                formOutdoor.style.display = 'none';
-                formLainya.style.display = 'none';
-            } else if (optionOutdoor.checked) {
-                formKertas.style.display = 'none';
-                formOutdoor.style.display = 'block';
-                formLainya.style.display = 'none';
-            } else if (optionLainya.checked) {
-                formKertas.style.display = 'none';
-                formOutdoor.style.display = 'none';
-                formLainya.style.display = 'block';
-            }
-        }
-
         function cetakWo() {
             const noWo = document.getElementById('noWo');
             const woValue = noWo.value.trim();
@@ -415,6 +395,15 @@
             const finishingOd = document.getElementById('finishingOd').value.trim();
             const judulOd = document.getElementById('judulOd').value.trim();
             const requestPackingOd = document.getElementById('requestPackingOd').value.trim();
+
+            if (!opg || !woNama || !qty) {
+                alert("Mohon isi OPG, WO/Nama, dan Jumlah Cetak!");
+                return;
+            }
+            // cek form
+            
+            // Susun struktur awal
+            let result = `${line}_${opg}_${woNama}${buku}_${kertas}_${jumlah}`;
         }
 
         function generateKertas() {
@@ -451,6 +440,9 @@
                     return;
                 }
                 buku = `_${judul}_ISI`;
+            }
+            if(judul !== "") {
+                buku = `_${judul}`;
             }
             if (bolakbalik.checked) {
                 jumlah = `${desain}BB@${qty}X`;
