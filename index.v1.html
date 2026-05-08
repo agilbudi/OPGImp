@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rename Tool OPG</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #0b0e16;
+      --bg-card:     #111520;
+      --bg-header:   #0d1019;
+      --bg-input:    #090c13;
+      --bg-extra:    rgba(251,191,36,0.05);
+      --accent:      #fbbf24;
+      --accent-glow: rgba(251,191,36,0.25);
+      --accent-dim:  rgba(251,191,36,0.12);
+      --green:       #34d399;
+      --green-dim:   rgba(52,211,153,0.15);
+      --text:        #d1d9e6;
+      --text-dim:    #5c6b82;
+      --text-label:  #7c8fa8;
+      --border:      #1c2333;
+      --border-hi:   #2a3650;
+      --shadow:      0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      min-height: 100vh;
+      background-image:
+        radial-gradient(ellipse 60% 40% at 15% 0%, rgba(251,191,36,.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 85% 100%, rgba(52,211,153,.04) 0%, transparent 60%);
+    }
+
+    /* ── HEADER ─── */
+    .site-header { text-align:center; padding:44px 0 28px; }
+    .site-header h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.6rem,6vw,4.2rem);
+      font-weight: 700; letter-spacing:.12em; text-transform:uppercase;
+      color: var(--accent);
+      text-shadow: 0 0 48px rgba(251,191,36,.35), 0 2px 0 rgba(0,0,0,.6);
+      line-height:1;
+    }
+    .header-rule {
+      width:64px; height:3px;
+      background: linear-gradient(90deg,transparent,var(--accent),transparent);
+      margin:14px auto 12px; border-radius:2px;
+    }
+    .header-sub {
+      font-size:10px; letter-spacing:.22em;
+      text-transform:uppercase; color:var(--text-dim);
+    }
+
+    /* ── CARD ─── */
+    .f-card {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:10px; overflow:hidden; height:100%;
+      display:flex; flex-direction:column;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    .f-card:hover { border-color:var(--border-hi); box-shadow:var(--shadow); }
+
+    .f-card-head {
+      background:var(--bg-header); border-bottom:1px solid var(--border);
+      padding:11px 18px; display:flex; align-items:center; gap:10px;
+    }
+    .f-card-head .num {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:26px; font-weight:700; color:var(--accent); line-height:1;
+    }
+    .f-card-head .title {
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:19px; font-weight:600; letter-spacing:.06em;
+      text-transform:uppercase; color:var(--text);
+    }
+    .f-pill {
+      margin-left:auto; background:var(--accent-dim); color:var(--accent);
+      font-size:10px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+      padding:3px 9px; border-radius:3px;
+    }
+
+    .f-card-body {
+      padding:20px 18px; flex:1;
+      display:flex; flex-direction:column; gap:14px;
+    }
+
+    /* ── FORM ELEMENTS ─── */
+    .form-label {
+      display:block; font-size:10px; letter-spacing:.16em;
+      text-transform:uppercase; color:var(--text-label); margin-bottom:5px;
+    }
+    .form-control,.form-select {
+      background:var(--bg-input) !important;
+      border:1px solid var(--border) !important;
+      color:var(--text) !important;
+      font-family:'JetBrains Mono',monospace;
+      font-size:12.5px; border-radius:6px; padding:8px 11px;
+      transition:border-color .15s,box-shadow .15s;
+    }
+    .form-control::placeholder { color:var(--text-dim); }
+    .form-control:focus,.form-select:focus {
+      border-color:var(--accent) !important;
+      box-shadow:0 0 0 3px var(--accent-glow) !important; outline:none;
+    }
+    .form-select option { background:#111520; }
+    .form-select optgroup { color:var(--accent); font-weight:700; }
+
+    /* sisi radio */
+    .sisi-group { display:flex; gap:10px; }
+    .sisi-opt {
+      flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+      background:var(--bg-input); border:1px solid var(--border);
+      border-radius:6px; padding:9px 10px; cursor:pointer;
+      transition:border-color .15s,background .15s;
+      font-size:12px; color:var(--text);
+    }
+    .sisi-opt input[type=radio] { accent-color:var(--accent); width:14px; height:14px; cursor:pointer; }
+    .sisi-opt:has(input:checked) { border-color:var(--accent); background:var(--accent-dim); color:var(--accent); }
+
+    .f-divider { border-color:var(--border); }
+
+    /* cetak ulang */
+    .cetak-group { display:flex; gap:8px; }
+    .btn-buka {
+      background:transparent; border:1px solid var(--accent); color:var(--accent);
+      font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:600;
+      letter-spacing:.08em; text-transform:uppercase;
+      padding:7px 14px; border-radius:6px; white-space:nowrap; cursor:pointer;
+      transition:background .15s;
+    }
+    .btn-buka:hover { background:var(--accent-dim); }
+
+    /* generate */
+    .btn-gen {
+      background:var(--accent); color:#0b0e16; border:none;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:17px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      padding:11px 20px; border-radius:7px; width:100%; cursor:pointer;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      transition:background .15s,transform .1s,box-shadow .15s;
+      box-shadow:0 2px 12px rgba(251,191,36,.25);
+    }
+    .btn-gen:hover  { background:#fcd34d; transform:translateY(-1px); box-shadow:0 4px 20px rgba(251,191,36,.4); }
+    .btn-gen:active { transform:translateY(0); }
+    .spacer { flex:1; }
+
+    /* ── EXTRA FIELDS ─── */
+    .extra-box {
+      background:var(--bg-extra); border:1px solid rgba(251,191,36,.2);
+      border-radius:8px; padding:14px;
+      display:flex; flex-direction:column; gap:10px;
+      animation:fadeIn .2s ease;
+    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none} }
+    .extra-title { font-size:10px; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); }
+
+    /* kolong */
+    .kolong-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    .kolong-item {
+      display:flex; align-items:center; gap:8px;
+      background:var(--bg-input); border:1px solid var(--border);
+      border-radius:6px; padding:8px 10px; cursor:pointer;
+      transition:border-color .15s,background .15s;
+    }
+    .kolong-item:has(input:checked) { border-color:var(--accent); background:var(--accent-dim); }
+    .kolong-item.kl-disabled { opacity:.35; pointer-events:none; }
+    .kolong-item input[type=checkbox] { accent-color:var(--accent); width:14px; height:14px; cursor:pointer; }
+    .kolong-item label { font-size:12px; color:var(--text); cursor:pointer; user-select:none; }
+
+    /* keling */
+    .keling-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+
+    /* ── OUTPUT ─── */
+    .output-section {
+      background:var(--bg-card); border:1px solid var(--border);
+      border-radius:10px; overflow:hidden; box-shadow:var(--shadow);
+      animation:fadeIn .25s ease;
+    }
+    .output-head {
+      background:var(--bg-header); border-bottom:1px solid var(--border);
+      padding:11px 18px; display:flex; align-items:center; gap:10px;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:17px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-dim);
+    }
+    .output-src {
+      background:var(--green-dim); color:var(--green);
+      font-size:10px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+      padding:3px 9px; border-radius:3px;
+    }
+    .output-body { padding:18px; }
+    .output-txt {
+      background:var(--bg-input); border:1px solid var(--border);
+      border-radius:7px; padding:16px 18px;
+      font-family:'JetBrains Mono',monospace; font-size:13.5px;
+      color:var(--accent); word-break:break-all; line-height:1.7;
+      min-height:58px; letter-spacing:.01em;
+    }
+    .output-actions { display:flex; gap:10px; margin-top:14px; }
+    .btn-copy {
+      background:var(--green); color:#0b0e16; border:none;
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:15px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+      padding:10px 22px; border-radius:6px; cursor:pointer;
+      display:flex; align-items:center; gap:7px;
+      transition:background .15s,transform .1s;
+      box-shadow:0 2px 10px rgba(52,211,153,.25);
+    }
+    .btn-copy:hover  { background:#6ee7b7; transform:translateY(-1px); }
+    .btn-copy:active { transform:translateY(0); }
+    .btn-copied { background:var(--accent) !important; }
+    .btn-copied:hover { background:var(--accent) !important; }
+
+    /* toast */
+    .toast-msg {
+      position:fixed; bottom:24px; right:24px;
+      background:#1c2333; border:1px solid var(--border-hi);
+      color:var(--text); border-radius:8px;
+      padding:12px 18px; font-size:12px;
+      box-shadow:0 8px 32px rgba(0,0,0,.6);
+      display:flex; align-items:center; gap:9px;
+      z-index:9999; max-width:320px; animation:fadeIn .25s ease;
+    }
+    .toast-msg.is-error { border-color:#ef4444; }
+    .toast-icon { font-size:16px; }
+    .icon-err { color:#ef4444; }
+    .icon-ok  { color:var(--green); }
+
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:3px; }
+  </style>
+</head>
+<body>
+<div class="container-xl px-3 pb-5">
+
+  <!-- HEADER -->
+  <div class="site-header">
+    <h1>Rename Tool OPG</h1>
+    <div class="header-rule"></div>
+    <p class="header-sub">Generate &middot; Rename &middot; Manage Work Orders</p>
+  </div>
+
+  <!-- FORMS -->
+  <div class="row g-3 mb-4 align-items-stretch">
+
+    <!-- FORM 1 · DATA -->
+    <div class="col-lg-4">
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="num">01</span>
+          <span class="title">Data</span>
+        </div>
+        <div class="f-card-body">
+
+          <div>
+            <label class="form-label">LINE</label>
+            <select class="form-select" id="line">
+              <option value="">— Pilih LINE —</option>
+              <option value="DTG">DTG</option>
+              <option value="CO">CORPORATE</option>
+              <option value="PE">PRIORITAS</option>
+              <option value="EV">EVENT</option>
+              <option value="OL">RITEL / ONLINE</option>
+              <option value="S">MARKETPLACE</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label">Inisial OPG</label>
+            <input type="text" class="form-control" id="inisial"
+              placeholder="contoh: BGS" maxlength="6"
+              oninput="this.value=this.value.toUpperCase()">
+          </div>
+
+          <div>
+            <label class="form-label">No. WO</label>
+            <input type="text" class="form-control" id="nowo"
+              placeholder="030526-124 Budi Sukoco">
+          </div>
+
+          <hr class="f-divider">
+
+          <div>
+            <label class="form-label">Cetak Ulang WO</label>
+            <div class="cetak-group">
+              <input type="text" class="form-control" id="cetakUlang"
+                placeholder="Masukkan No. WO">
+              <button class="btn-buka" onclick="openCetakUlang()">
+                <i class="bi bi-box-arrow-up-right"></i> Buka
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM 2 · KERTAS A3 -->
+    <div class="col-lg-4">
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="num">02</span>
+          <span class="title">Kertas A3</span>
+          <span class="f-pill">A3</span>
+        </div>
+        <div class="f-card-body">
+
+          <div>
+            <label class="form-label">Jenis Kertas</label>
+            <select class="form-select" id="jenisKertas">
+              <option value="">— Pilih Kertas —</option>
+              <optgroup label="BOOK PAPER (BP)">
+                <option value="BP58">BOOK PAPER 58</option>
+                <option value="BP72">BOOK PAPER 72</option>
+              </optgroup>
+              <optgroup label="HVS">
+                <option value="HVS70">HVS 70</option>
+                <option value="HVS80">HVS 80</option>
+                <option value="HVS100">HVS 100</option>
+              </optgroup>
+              <optgroup label="IVORY (IV)">
+                <option value="IV210">IVORY 210</option>
+                <option value="IV230">IVORY 230</option>
+                <option value="IV260">IVORY 260</option>
+                <option value="IV310">IVORY 310</option>
+              </optgroup>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label">Jumlah Desain</label>
+            <input type="number" class="form-control" id="jumlahDesain" placeholder="0" min="1">
+          </div>
+
+          <div>
+            <label class="form-label">Sisi Cetak</label>
+            <div class="sisi-group">
+              <label class="sisi-opt">
+                <input type="radio" name="sisi" value="1SISI" checked> 1 Sisi
+              </label>
+              <label class="sisi-opt">
+                <input type="radio" name="sisi" value="2SISI"> 2 Sisi
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Jumlah Cetak</label>
+            <input type="number" class="form-control" id="jumlahCetak" placeholder="0" min="1">
+          </div>
+
+          <div class="spacer"></div>
+
+          <button class="btn-gen" onclick="generateKertas()">
+            <i class="bi bi-lightning-fill"></i> Generate Kertas A3
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM 3 · OUTDOOR -->
+    <div class="col-lg-4">
+      <div class="f-card">
+        <div class="f-card-head">
+          <span class="num">03</span>
+          <span class="title">Outdoor</span>
+          <span class="f-pill">OD</span>
+        </div>
+        <div class="f-card-body">
+
+          <div>
+            <label class="form-label">Jenis Bahan</label>
+            <select class="form-select" id="jenisBahan">
+              <option value="">— Pilih Bahan —</option>
+              <option value="ECO280">ECO 280</option>
+              <option value="STD340">STANDART 340</option>
+              <option value="STD340D">STANDART 340-DOFF</option>
+              <option value="SUP440G">SUPER 440-GLOSSY</option>
+              <option value="SUP440D">SUPER 440-DOFF</option>
+              <option value="SATIN">SATIN</option>
+              <option value="BL">BACKLIGHT</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="form-label">Finishing</label>
+            <select class="form-select" id="finishing" onchange="handleFinishing()">
+              <option value="">— Pilih Finishing —</option>
+              <option value="SIMPRES">SIMPRES</option>
+              <option value="SIMPUT">SIMPUT</option>
+              <option value="SIMPRES_KEPO">SIMPRES KEPO</option>
+              <option value="SIMPUT_KEPO">SIMPUT KEPO</option>
+              <option value="SIBA">SISA BAHAN</option>
+              <option value="SIMPRES_KELING">SIMPRES KELING</option>
+              <option value="SIMPUT_KELING">SIMPUT KELING</option>
+              <option value="KOLONG">KOLONG</option>
+              <option value="CUSTOM">CUSTOM</option>
+            </select>
+          </div>
+
+          <!-- Extra: KOLONG checkboxes -->
+          <div id="extraKolong" class="extra-box d-none">
+            <div class="extra-title"><i class="bi bi-grid-3x3 me-1"></i>Posisi Kolong</div>
+            <div class="kolong-grid">
+              <div class="kolong-item" id="ci-atas">
+                <input type="checkbox" id="kolongAtas" onchange="handleKolongCheck('tb')">
+                <label for="kolongAtas">Atas</label>
+              </div>
+              <div class="kolong-item" id="ci-kanan">
+                <input type="checkbox" id="kolongKanan" onchange="handleKolongCheck('rl')">
+                <label for="kolongKanan">Kanan</label>
+              </div>
+              <div class="kolong-item" id="ci-bawah">
+                <input type="checkbox" id="kolongBawah" onchange="handleKolongCheck('tb')">
+                <label for="kolongBawah">Bawah</label>
+              </div>
+              <div class="kolong-item" id="ci-kiri">
+                <input type="checkbox" id="kolongKiri" onchange="handleKolongCheck('rl')">
+                <label for="kolongKiri">Kiri</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Extra: KELING inputs -->
+          <div id="extraKeling" class="extra-box d-none">
+            <div class="extra-title"><i class="bi bi-tools me-1"></i>Jumlah Keling</div>
+            <div class="keling-grid">
+              <div>
+                <label class="form-label">Atas</label>
+                <input type="number" class="form-control" id="kelingAtas" placeholder="0" min="0">
+              </div>
+              <div>
+                <label class="form-label">Bawah</label>
+                <input type="number" class="form-control" id="kelingBawah" placeholder="0" min="0">
+              </div>
+              <div>
+                <label class="form-label">Kanan</label>
+                <input type="number" class="form-control" id="kelingKanan" placeholder="0" min="0">
+              </div>
+              <div>
+                <label class="form-label">Kiri</label>
+                <input type="number" class="form-control" id="kelingKiri" placeholder="0" min="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Extra: SISA BAHAN -->
+          <div id="extraSisa" class="extra-box d-none">
+            <div class="extra-title"><i class="bi bi-rulers me-1"></i>Sisa Bahan</div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="number" class="form-control" id="sisaCm" placeholder="0" min="0">
+              <span style="color:var(--text-dim);white-space:nowrap;">cm</span>
+            </div>
+          </div>
+
+          <div>
+            <label class="form-label">Jumlah (pcs)</label>
+            <input type="number" class="form-control" id="jumlahPcs" placeholder="0" min="1">
+          </div>
+
+          <div class="spacer"></div>
+
+          <button class="btn-gen" onclick="generateOutdoor()">
+            <i class="bi bi-lightning-fill"></i> Generate Outdoor
+          </button>
+
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /row -->
+
+  <!-- OUTPUT -->
+  <div class="output-section" id="outputSection" style="display:none">
+    <div class="output-head">
+      <i class="bi bi-terminal-fill" style="color:var(--accent);font-size:16px;"></i>
+      Hasil Generate
+      <span class="output-src" id="outputSrc"></span>
+    </div>
+    <div class="output-body">
+      <div class="output-txt" id="outputTxt"></div>
+      <div class="output-actions">
+        <button class="btn-copy" id="btnCopy" onclick="copyOutput()">
+          <i class="bi bi-clipboard"></i> Copy Teks
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast-msg" id="toastEl" style="display:none">
+  <i class="bi toast-icon" id="toastIcon"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ── TOAST ── */
+let _toastTimer;
+function showToast(msg, type) {
+  type = type || 'ok';
+  const el = document.getElementById('toastEl');
+  const ic = document.getElementById('toastIcon');
+  document.getElementById('toastMsg').textContent = msg;
+  ic.className = 'bi toast-icon ' + (type === 'err' ? 'bi-x-circle-fill icon-err' : 'bi-check-circle-fill icon-ok');
+  el.className = 'toast-msg' + (type === 'err' ? ' is-error' : '');
+  el.style.display = 'flex';
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function(){ el.style.display='none'; }, 3000);
+}
+
+/* ── KOLONG EXCLUSIVITY ── */
+var KOLONG_IDS = {
+  tb: ['kolongAtas','kolongBawah'],
+  rl: ['kolongKanan','kolongKiri']
+};
+var CI_MAP = {
+  kolongAtas:'ci-atas', kolongBawah:'ci-bawah',
+  kolongKanan:'ci-kanan', kolongKiri:'ci-kiri'
+};
+
+function handleKolongCheck(activeGroup) {
+  var active   = KOLONG_IDS[activeGroup];
+  var opposite = KOLONG_IDS[activeGroup === 'tb' ? 'rl' : 'tb'];
+  var anyChecked = active.some(function(id){ return document.getElementById(id).checked; });
+  opposite.forEach(function(id){
+    var inp = document.getElementById(id);
+    var ci  = document.getElementById(CI_MAP[id]);
+    if (anyChecked) {
+      inp.checked = false; inp.disabled = true;
+      if(ci) ci.classList.add('kl-disabled');
+    } else {
+      inp.disabled = false;
+      if(ci) ci.classList.remove('kl-disabled');
+    }
+  });
+}
+
+/* ── FINISHING LOGIC ── */
+function handleFinishing() {
+  var val = document.getElementById('finishing').value;
+
+  ['extraKolong','extraKeling','extraSisa'].forEach(function(id){
+    document.getElementById(id).classList.add('d-none');
+  });
+
+  // Reset kolong
+  ['kolongAtas','kolongBawah','kolongKanan','kolongKiri'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.checked = false; el.disabled = false;
+    var ci = document.getElementById(CI_MAP[id]);
+    if(ci) ci.classList.remove('kl-disabled');
+  });
+
+  if (val === 'KOLONG') {
+    document.getElementById('extraKolong').classList.remove('d-none');
+  } else if (val === 'SIMPRES_KELING' || val === 'SIMPUT_KELING') {
+    document.getElementById('extraKeling').classList.remove('d-none');
+  } else if (val === 'SIBA') {
+    document.getElementById('extraSisa').classList.remove('d-none');
+  } else if (val === 'CUSTOM') {
+    document.getElementById('extraKolong').classList.remove('d-none');
+    document.getElementById('extraKeling').classList.remove('d-none');
+    // SISA BAHAN tidak tampil untuk CUSTOM
+  }
+}
+
+/* ── CETAK ULANG ── */
+function openCetakUlang() {
+  var val = document.getElementById('cetakUlang').value.trim();
+  if (!val) { showToast('Masukkan No. WO terlebih dahulu','err'); return; }
+  // ← Ganti URL ini sesuai sistem internal Anda
+  var url = 'https://www.google.com/search?q=' + encodeURIComponent(val);
+  window.open(url, '_blank');
+}
+
+/* ── GET DATA ── */
+function getData() {
+  return {
+    line:    document.getElementById('line').value,
+    inisial: document.getElementById('inisial').value.trim().toUpperCase(),
+    nowo:    document.getElementById('nowo').value.trim()
+  };
+}
+
+/* ── GENERATE KERTAS A3 ── */
+function generateKertas() {
+  var d       = getData();
+  var kertas  = document.getElementById('jenisKertas').value;
+  var jDesain = document.getElementById('jumlahDesain').value;
+  var sisi    = document.querySelector('input[name="sisi"]:checked').value;
+  var jCetak  = document.getElementById('jumlahCetak').value;
+
+  var miss = [];
+  if (!d.line)    miss.push('LINE');
+  if (!d.inisial) miss.push('Inisial OPG');
+  if (!d.nowo)    miss.push('No. WO');
+  if (!kertas)    miss.push('Jenis Kertas');
+  if (!jDesain)   miss.push('Jumlah Desain');
+  if (!jCetak)    miss.push('Jumlah Cetak');
+  if (miss.length) { showToast('Lengkapi: ' + miss.join(', '),'err'); return; }
+
+  var result = d.line+'-'+d.inisial+'-'+d.nowo+'-A3-'+kertas+'-'+jDesain+'D-'+sisi+'-'+jCetak+'EX';
+  showOutput(result, 'Kertas A3');
+}
+
+/* ── GENERATE OUTDOOR ── */
+var FINISHING_LABEL = {
+  SIMPRES:'SIMPRES', SIMPUT:'SIMPUT',
+  SIMPRES_KEPO:'SIMPRES-KEPO', SIMPUT_KEPO:'SIMPUT-KEPO',
+  SIBA:'SIBA', SIMPRES_KELING:'SIMPRES-KELING',
+  SIMPUT_KELING:'SIMPUT-KELING', KOLONG:'KOLONG', CUSTOM:'CUSTOM'
+};
+
+function generateOutdoor() {
+  var d         = getData();
+  var bahan     = document.getElementById('jenisBahan').value;
+  var finishing = document.getElementById('finishing').value;
+  var jumlahPcs = document.getElementById('jumlahPcs').value;
+
+  var miss = [];
+  if (!d.line)    miss.push('LINE');
+  if (!d.inisial) miss.push('Inisial OPG');
+  if (!d.nowo)    miss.push('No. WO');
+  if (!bahan)     miss.push('Jenis Bahan');
+  if (!finishing) miss.push('Finishing');
+  if (!jumlahPcs) miss.push('Jumlah PCS');
+  if (miss.length) { showToast('Lengkapi: ' + miss.join(', '),'err'); return; }
+
+  var finLabel = FINISHING_LABEL[finishing] || finishing;
+  var extras = [];
+
+  // Kolong
+  var needKolong = finishing === 'KOLONG' || finishing === 'CUSTOM';
+  if (needKolong) {
+    var pos = [];
+    if (document.getElementById('kolongAtas').checked)  pos.push('A');
+    if (document.getElementById('kolongBawah').checked) pos.push('B');
+    if (document.getElementById('kolongKanan').checked) pos.push('Kn');
+    if (document.getElementById('kolongKiri').checked)  pos.push('Ki');
+    if (pos.length) extras.push('KLG('+pos.join('')+')');
+  }
+
+  // Keling
+  var needKeling = finishing === 'SIMPRES_KELING' || finishing === 'SIMPUT_KELING' || finishing === 'CUSTOM';
+  if (needKeling) {
+    var kA  = document.getElementById('kelingAtas').value  || '0';
+    var kB  = document.getElementById('kelingBawah').value || '0';
+    var kKn = document.getElementById('kelingKanan').value || '0';
+    var kKi = document.getElementById('kelingKiri').value  || '0';
+    extras.push('KLG-A'+kA+'B'+kB+'Kn'+kKn+'Ki'+kKi);
+  }
+
+  // Sisa bahan
+  if (finishing === 'SIBA') {
+    var cm = document.getElementById('sisaCm').value || '0';
+    extras.push('SISA-'+cm+'cm');
+  }
+
+  var extStr = extras.length ? '-'+extras.join('-') : '';
+  var result = d.line+'-'+d.inisial+'-'+d.nowo+'-'+bahan+'-'+finLabel+extStr+'-'+jumlahPcs+'PCS';
+  showOutput(result, 'Outdoor');
+}
+
+/* ── SHOW OUTPUT ── */
+function showOutput(text, src) {
+  var sec = document.getElementById('outputSection');
+  document.getElementById('outputTxt').textContent = text;
+  document.getElementById('outputSrc').textContent = src;
+  sec.style.display = 'block';
+
+  var btn = document.getElementById('btnCopy');
+  btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy Teks';
+  btn.classList.remove('btn-copied');
+
+  setTimeout(function(){
+    sec.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 50);
+  showToast('Hasil generate siap!','ok');
+}
+
+/* ── COPY OUTPUT ── */
+function copyOutput() {
+  var text = document.getElementById('outputTxt').textContent;
+  var btn  = document.getElementById('btnCopy');
+  navigator.clipboard.writeText(text).then(function(){
+    btn.innerHTML = '<i class="bi bi-check2"></i> Tersalin!';
+    btn.classList.add('btn-copied');
+    showToast('Teks berhasil disalin','ok');
+    setTimeout(function(){
+      btn.innerHTML = '<i class="bi bi-clipboard"></i> Copy Teks';
+      btn.classList.remove('btn-copied');
+    }, 2500);
+  }).catch(function(){
+    showToast('Gagal menyalin teks','err');
+  });
+}
+</script>
+</body>
+</html>

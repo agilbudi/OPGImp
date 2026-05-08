@@ -134,8 +134,6 @@
                     </div>
                 </div>
             </div>
-            
-
             <!-- bagian akhir form utama -->
 
             <div class="col-md-9 fs-6">
@@ -279,7 +277,7 @@
                                         <option value="SIMPUT KEPO">SIMPUT KELING POJOK</option>
                                         <option value="SIMPUT">SIMPUT</option>
                                         <option value="SIBA">SISA BAHAN</option>
-                                        <option value="KOLONG">SISA BAHAN</option>
+                                        <option value="KOLONG">KOLONG</option>
                                     </select>
                                 </div>
                                 <div class="col-4">
@@ -298,7 +296,7 @@
                                     <div class="col-6 ">
                                         <label for="judulOd" class="form-label">Judul</label>
                                         <input type="text" id="judulOd" class="form-control fst-italic"
-                                            placeholder="Black Mirror">
+                                            placeholder="BANNER RUJAK">
                                     </div>
                                     <div class="col-4">
                                         <label class="fw-bold mx-2">-</label>
@@ -330,6 +328,11 @@
                         </div>
                     </div>
                     <!-- akhir bagian form outdoor -->
+                    <!-- script outdoor -->
+                     <!---->
+
+
+                    <!-- akhir script outdoor -->
                 </div>
                 <div class="row m-2">
                     <div class="card items-center">
@@ -396,14 +399,14 @@
             const judulOd = document.getElementById('judulOd').value.trim();
             const requestPackingOd = document.getElementById('requestPackingOd').value.trim();
 
-            if (!opg || !woNama || !qty) {
-                alert("Mohon isi OPG, WO/Nama, dan Jumlah Cetak!");
+            if (!opg || !woNama || !qtyOd) {
+                alert("Mohon isi OPG, WO/Nama, dan Data Outdoor!");
                 return;
             }
             // cek form
             
             // Susun struktur awal
-            let result = `${line}_${opg}_${woNama}${buku}_${kertas}_${jumlah}`;
+            let result = `${line}_${opg}_${woNama}${judulOd}_${bahanOd}_ukuran_${finishingOd}_${qtyOd}X${requestPackingOd}`;
         }
 
         function generateKertas() {
@@ -425,7 +428,7 @@
             let jumlah = ""
 
             if (!opg || !woNama || !qty) {
-                alert("Mohon isi OPG, WO/Nama, dan Jumlah Cetak!");
+                alert("Mohon isi OPG, WO/Nama, dan Data Kertas!");
                 return;
             }
             if (optionCover.checked) {
@@ -445,7 +448,7 @@
                 buku = `_${judul}`;
             }
             if (bolakbalik.checked) {
-                jumlah = `${desain}BB@${qty}X`;
+                jumlah = desain == "" ? `1BB@${qty}X` : `${desain}BB@${qty}X`;
             } else {
                 if (jmlDesain != "") {
                     jumlah = `${desain}@${qty}X`;
